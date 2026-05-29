@@ -32,9 +32,9 @@ export default function Navbar() {
               <Image
                 src="/images/logo/logo-01.png"
                 alt="Salem Silver Capital"
-                width={160}
-                height={34}
-                className="h-8 w-auto brightness-0 invert"
+                width={180}
+                height={38}
+                className="h-10 w-auto"
                 priority
               />
             </div>
