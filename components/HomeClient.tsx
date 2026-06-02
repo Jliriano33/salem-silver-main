@@ -10,7 +10,6 @@ import Comparison from './Comparison';
 import Situations from './Situations';
 import Testimonials from './Testimonials';
 import CTABanner from './CTABanner';
-import LeadForm from './LeadForm';
 import FAQ from './FAQ';
 import ServiceArea from './ServiceArea';
 
@@ -32,7 +31,6 @@ export default function HomeClient() {
       <Situations onCTAClick={() => { window.location.href = '/cash-offer'; }} />
       <Testimonials />
       <CTABanner onCTAClick={() => { window.location.href = '/cash-offer'; }} />
-      <LeadForm />
       <FAQ />
       <ServiceArea />
     </>
