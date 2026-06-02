@@ -540,28 +540,28 @@ export default function CashOfferQuiz() {
           {/* ── Right: sidebar (desktop only) ── */}
           {side && (
             <aside className="hidden lg:block">
-              <div className="bg-brand-dark rounded-2xl p-6 text-white sticky top-24">
+              <div className="bg-white border border-gray-200 rounded-2xl p-6 sticky top-24 shadow-sm">
                 <div className="text-center mb-5">
                   <svg width="88" height="74" viewBox="0 0 110 92" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                    <rect x="12" y="48" width="86" height="44" rx="3" fill="#1a2a4a"/>
+                    <rect x="12" y="48" width="86" height="44" rx="3" fill="#dbeafe"/>
                     <polygon points="55,8 4,52 106,52" fill="#2D6BA1"/>
-                    <rect x="38" y="62" width="34" height="30" rx="2" fill="#162240"/>
-                    <rect x="15" y="55" width="22" height="22" rx="2" fill="#162240"/>
-                    <rect x="73" y="55" width="22" height="22" rx="2" fill="#162240"/>
+                    <rect x="38" y="62" width="34" height="30" rx="2" fill="#bfdbfe"/>
+                    <rect x="15" y="55" width="22" height="22" rx="2" fill="#93c5fd"/>
+                    <rect x="73" y="55" width="22" height="22" rx="2" fill="#93c5fd"/>
                     <rect x="51" y="79" width="8" height="13" rx="1" fill="#2D6BA1"/>
-                    <rect x="18" y="58" width="16" height="14" rx="1" fill="#F4A225" opacity="0.25"/>
-                    <rect x="76" y="58" width="16" height="14" rx="1" fill="#F4A225" opacity="0.25"/>
+                    <rect x="18" y="58" width="16" height="14" rx="1" fill="#F4A225" opacity="0.4"/>
+                    <rect x="76" y="58" width="16" height="14" rx="1" fill="#F4A225" opacity="0.4"/>
                   </svg>
                 </div>
-                <h3 className="font-bold text-base mb-2">{side.h}</h3>
-                <p className="text-sm text-white/65 leading-relaxed mb-5">{side.b}</p>
-                <div className="bg-brand-gold rounded-lg px-4 py-3 text-center text-sm font-bold">
+                <h3 className="font-bold text-base mb-2 text-gray-900">{side.h}</h3>
+                <p className="text-sm text-gray-500 leading-relaxed mb-5">{side.b}</p>
+                <div className="bg-brand-gold rounded-lg px-4 py-3 text-center text-sm font-bold text-white">
                   Close in as little as 7 days
                 </div>
-                <div className="mt-4 pt-4 border-t border-white/10">
-                  <p className="text-xs text-white/45 text-center">
+                <div className="mt-4 pt-4 border-t border-gray-100">
+                  <p className="text-xs text-gray-400 text-center">
                     Questions?{' '}
-                    <a href="tel:+16177142020" className="text-brand-gold hover:underline">(617) 714-2020</a>
+                    <a href="tel:+16177142020" className="text-brand-blue font-semibold hover:underline">(617) 714-2020</a>
                   </p>
                 </div>
               </div>
