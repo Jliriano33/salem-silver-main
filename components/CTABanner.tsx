@@ -4,21 +4,13 @@ interface CTABannerProps {
 
 export default function CTABanner({ onCTAClick }: CTABannerProps) {
   return (
-    <section
-      className="relative py-24 lg:py-32 flex items-center justify-center"
-      style={{
-        backgroundImage: "url('/images/cta-bg.jpg'), linear-gradient(135deg, #1a1a2e 0%, #0a0a0a 100%)",
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-      }}
-    >
-      <div className="absolute inset-0 bg-black/70" />
-      <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <section className="bg-brand-blue py-24 lg:py-32 flex items-center justify-center">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4 leading-tight">
           Ready to Get Your{' '}
           <span className="text-brand-gold">Cash Offer?</span>
         </h2>
-        <p className="text-white/70 text-lg mb-10">
+        <p className="text-white/80 text-lg mb-10">
           It takes 60 seconds. No obligation. No pressure. Just a fair cash offer for your home.
         </p>
 
@@ -50,7 +42,7 @@ export default function CTABanner({ onCTAClick }: CTABannerProps) {
               <svg className="w-4 h-4 text-brand-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              <span className="text-white/70 text-sm">{item}</span>
+              <span className="text-white/80 text-sm">{item}</span>
             </div>
           ))}
         </div>

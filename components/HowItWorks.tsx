@@ -54,7 +54,7 @@ export default function HowItWorks() {
             <div key={step.n} className="flex flex-col items-center text-center">
               {/* Icon card with number badge */}
               <div className="relative mb-6">
-                <div className="w-20 h-20 bg-brand-dark rounded-2xl flex items-center justify-center shadow-lg">
+                <div className="w-20 h-20 bg-brand-blue rounded-2xl flex items-center justify-center shadow-lg">
                   {step.icon}
                 </div>
                 <span className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-brand-gold text-white text-xs font-bold flex items-center justify-center">

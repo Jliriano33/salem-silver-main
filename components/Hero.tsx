@@ -16,30 +16,21 @@ export default function Hero({ onAddressSubmit }: HeroProps) {
   };
 
   return (
-    <section
-      className="relative min-h-screen flex flex-col justify-center pt-16"
-      style={{
-        backgroundImage: "url('/images/hero-bg.jpg'), linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%)",
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-      }}
-    >
-      {/* Dark overlay */}
-      <div className="absolute inset-0 bg-black/65" />
+    <section className="min-h-screen flex flex-col justify-center pt-16 bg-gradient-to-br from-white via-white to-brand-blue/5">
 
-      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
 
         {/* Trust badge */}
-        <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 mb-8">
+        <div className="inline-flex items-center gap-2 bg-brand-blue/5 border border-brand-blue/20 rounded-full px-4 py-2 mb-8">
           <svg className="w-4 h-4 text-brand-gold flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
             <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762z" />
             <path d="M9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z" />
           </svg>
-          <span className="text-white text-sm font-medium">500+ Homes Purchased · Licensed &amp; Trusted in MA</span>
+          <span className="text-gray-700 text-sm font-medium">500+ Homes Purchased · Licensed &amp; Trusted in MA</span>
         </div>
 
         {/* Headline */}
-        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-4">
+        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-4">
           Get a Cash Offer Today
         </h1>
         <p className="text-3xl sm:text-4xl lg:text-5xl font-bold text-brand-gold leading-tight mb-6">
@@ -47,7 +38,7 @@ export default function Hero({ onAddressSubmit }: HeroProps) {
         </p>
 
         {/* Subheadline */}
-        <p className="text-white/80 text-lg sm:text-xl mb-10 max-w-2xl mx-auto leading-relaxed">
+        <p className="text-gray-600 text-lg sm:text-xl mb-10 max-w-2xl mx-auto leading-relaxed">
           Receive a no-obligation cash offer for your Massachusetts home.
           Close in as little as 7 days — no repairs, no agents, no fees.
         </p>
@@ -86,14 +77,14 @@ export default function Hero({ onAddressSubmit }: HeroProps) {
 
         {/* Social proof badges */}
         <div className="flex flex-wrap items-center justify-center gap-4 mb-10">
-          <div className="flex items-center gap-1.5 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2">
+          <div className="flex items-center gap-1.5 bg-gray-100 rounded-full px-4 py-2">
             <span className="text-yellow-400 text-sm">★★★★★</span>
-            <span className="text-white text-sm font-semibold">5.0</span>
-            <span className="text-white/60 text-xs">Google</span>
+            <span className="text-gray-900 text-sm font-semibold">5.0</span>
+            <span className="text-gray-500 text-xs">Google</span>
           </div>
-          <div className="flex items-center gap-1.5 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2">
+          <div className="flex items-center gap-1.5 bg-gray-100 rounded-full px-4 py-2">
             <span className="text-brand-gold text-sm font-bold">A+</span>
-            <span className="text-white/60 text-xs">BBB Rated</span>
+            <span className="text-gray-500 text-xs">BBB Rated</span>
           </div>
         </div>
 
@@ -111,7 +102,7 @@ export default function Hero({ onAddressSubmit }: HeroProps) {
                   <path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </span>
-              <span className="text-white/80 text-sm">{item}</span>
+              <span className="text-gray-700 text-sm">{item}</span>
             </div>
           ))}
         </div>
