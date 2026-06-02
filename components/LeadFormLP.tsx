@@ -74,7 +74,7 @@ export default function LeadFormLP({ source }: LeadFormLPProps) {
 
       setSuccess(true);
       const encoded = encodeURIComponent(form.address);
-      setTimeout(() => router.push(`/thank-you?address=${encoded}`), 1500);
+      setTimeout(() => router.push(`/cash-offer?address=${encoded}`), 1500);
     } catch {
       setError('Something went wrong. Please call us at +1 617-714-2020.');
     } finally {

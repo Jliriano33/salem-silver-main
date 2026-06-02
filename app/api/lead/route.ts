@@ -1,6 +1,6 @@
 export const runtime = 'edge';
 
-const ALLOWED_SOURCES = ['website', 'facebook-lp', 'google-lp'] as const;
+const ALLOWED_SOURCES = ['website', 'facebook-lp', 'google-lp', 'cash-offer-quiz'] as const;
 type AllowedSource = (typeof ALLOWED_SOURCES)[number];
 
 const CONDITION_VALUES = ['Excellent', 'Good', 'Fair', 'Needs Work', 'Major Repairs Needed'];

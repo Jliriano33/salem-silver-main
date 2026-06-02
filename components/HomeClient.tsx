@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Hero from './Hero';
 import Stats from './Stats';
 import SocialProof from './SocialProof';
@@ -15,13 +15,10 @@ import FAQ from './FAQ';
 import ServiceArea from './ServiceArea';
 
 export default function HomeClient() {
-  const [heroAddress, setHeroAddress] = useState('');
+  const router = useRouter();
 
   const handleHeroSubmit = (address: string) => {
-    setHeroAddress(address);
-    setTimeout(() => {
-      document.getElementById('lead-form')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 80);
+    router.push(`/cash-offer?address=${encodeURIComponent(address)}`);
   };
 
   return (
@@ -35,7 +32,7 @@ export default function HomeClient() {
       <Situations onCTAClick={() => document.getElementById('lead-form')?.scrollIntoView({ behavior: 'smooth' })} />
       <Testimonials />
       <CTABanner onCTAClick={() => document.getElementById('lead-form')?.scrollIntoView({ behavior: 'smooth' })} />
-      <LeadForm initialAddress={heroAddress} />
+      <LeadForm />
       <FAQ />
       <ServiceArea />
     </>
