@@ -29,9 +29,9 @@ export default function HomeClient() {
       <HowItWorks />
       <WhyUs />
       <Comparison />
-      <Situations onCTAClick={() => document.getElementById('lead-form')?.scrollIntoView({ behavior: 'smooth' })} />
+      <Situations onCTAClick={() => { window.location.href = '/cash-offer'; }} />
       <Testimonials />
-      <CTABanner onCTAClick={() => document.getElementById('lead-form')?.scrollIntoView({ behavior: 'smooth' })} />
+      <CTABanner onCTAClick={() => { window.location.href = '/cash-offer'; }} />
       <LeadForm />
       <FAQ />
       <ServiceArea />

@@ -12,7 +12,7 @@ export default function Hero({ onAddressSubmit }: HeroProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (address.trim()) onAddressSubmit(address.trim());
-    else document.getElementById('lead-form')?.scrollIntoView({ behavior: 'smooth' });
+    else window.location.href = '/cash-offer';
   };
 
   return (

@@ -72,8 +72,7 @@ export default function HowItWorks() {
         {/* CTA */}
         <div className="text-center mt-14">
           <a
-            href="#lead-form"
-            onClick={(e) => { e.preventDefault(); document.getElementById('lead-form')?.scrollIntoView({ behavior: 'smooth' }); }}
+            href="/cash-offer"
             className="inline-flex items-center gap-2 bg-brand-gold hover:bg-brand-gold-dark text-white font-bold text-base px-8 py-4 rounded-full transition-colors shadow-md"
           >
             Get Your Cash Offer Now

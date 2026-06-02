@@ -10,7 +10,7 @@ const navLinks = [
   { href: '/', label: 'Home' },
   { href: '#how-it-works', label: 'How It Works' },
   { href: '#faq', label: 'FAQ' },
-  { href: '#lead-form', label: 'Get Cash Offer' },
+  { href: '/cash-offer', label: 'Get Cash Offer' },
 ];
 
 export default function Footer() {

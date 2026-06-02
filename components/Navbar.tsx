@@ -7,12 +7,10 @@ import Link from 'next/link';
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const scrollToForm = (e: React.MouseEvent) => {
+  const goToCashOffer = (e: React.MouseEvent) => {
     e.preventDefault();
     setMenuOpen(false);
-    const el = document.getElementById('lead-form');
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
-    else window.location.href = '/#lead-form';
+    window.location.href = '/cash-offer';
   };
 
   return (
@@ -21,16 +19,14 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex-shrink-0">
-            <div className="bg-brand-dark rounded-lg px-3 py-1.5">
-              <Image
-                src="/images/logo/logo-01.png"
-                alt="Salem Silver Capital"
-                width={180}
-                height={38}
-                className="h-9 w-auto"
-                priority
-              />
-            </div>
+            <Image
+              src="/images/logo/logo-01.png"
+              alt="Salem Silver Capital"
+              width={220}
+              height={48}
+              className="h-12 w-auto"
+              priority
+            />
           </Link>
 
           {/* Desktop */}
@@ -46,8 +42,8 @@ export default function Navbar() {
               (617) 714-2020
             </a>
             <a
-              href="#lead-form"
-              onClick={scrollToForm}
+              href="/cash-offer"
+              onClick={goToCashOffer}
               className="bg-brand-gold hover:bg-brand-gold-dark text-white font-semibold text-sm px-5 py-2.5 rounded-full transition-colors"
             >
               Get Cash Offer
@@ -78,7 +74,7 @@ export default function Navbar() {
 
       {menuOpen && (
         <div id="mobile-menu" className="md:hidden bg-white border-t border-brand-blue/10 px-4 py-4">
-          <a href="#lead-form" onClick={scrollToForm}
+          <a href="/cash-offer" onClick={goToCashOffer}
             className="block bg-brand-gold text-white font-semibold text-center py-3 rounded-full mb-2">
             Get My Free Cash Offer
           </a>
