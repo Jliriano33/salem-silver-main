@@ -16,7 +16,7 @@ export default function Hero({ onAddressSubmit }: HeroProps) {
   };
 
   return (
-    <section className="min-h-screen flex flex-col justify-center pt-16 bg-gradient-to-br from-white via-white to-brand-blue/5">
+    <section className="min-h-screen flex flex-col justify-center pt-20 bg-gradient-to-br from-white via-white to-brand-blue/5">
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
 
