@@ -48,7 +48,7 @@ export default function HowItWorks() {
         {/* Steps */}
         <div className="relative grid grid-cols-1 md:grid-cols-3 gap-10">
           {/* Connecting line — desktop only */}
-          <div className="hidden md:block absolute top-10 left-[calc(16.67%+32px)] right-[calc(16.67%+32px)] h-px bg-brand-gold/30" aria-hidden="true" />
+          <div className="hidden md:block absolute top-10 left-[calc(16.67%+32px)] right-[calc(16.67%+32px)] h-px bg-brand-blue/30" aria-hidden="true" />
 
           {steps.map((step) => (
             <div key={step.n} className="flex flex-col items-center text-center">

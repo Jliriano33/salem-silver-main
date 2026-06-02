@@ -52,7 +52,7 @@ export default function FAQ() {
               >
                 <span className="font-semibold text-gray-900 pr-4 text-sm sm:text-base">{faq.q}</span>
                 <span className={`flex-shrink-0 w-7 h-7 rounded-full border-2 border-gray-200 flex items-center justify-center transition-transform ${open === i ? 'rotate-180 border-brand-gold bg-brand-gold/10' : ''}`}>
-                  <svg className={`w-3.5 h-3.5 ${open === i ? 'text-brand-gold' : 'text-gray-400'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg className={`w-3.5 h-3.5 ${open === i ? 'text-brand-blue' : 'text-gray-400'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
                   </svg>
                 </span>
@@ -71,7 +71,7 @@ export default function FAQ() {
           <p className="text-gray-500 mb-4">Still have questions?</p>
           <a
             href="tel:+16177142020"
-            className="inline-flex items-center gap-2 bg-brand-dark hover:bg-black text-white font-bold px-7 py-3.5 rounded-full transition-colors"
+            className="inline-flex items-center gap-2 bg-brand-blue hover:bg-brand-blue-dark text-white font-bold px-7 py-3.5 rounded-full transition-colors"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}

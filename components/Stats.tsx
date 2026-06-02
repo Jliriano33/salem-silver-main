@@ -12,7 +12,7 @@ export default function Stats() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
           {stats.map((s) => (
             <div key={s.label}>
-              <div className="text-3xl sm:text-4xl font-bold text-gray-900 mb-1">{s.number}</div>
+              <div className="text-3xl sm:text-4xl font-bold text-brand-blue mb-1">{s.number}</div>
               <div className="text-brand-gold text-sm font-medium">{s.label}</div>
             </div>
           ))}

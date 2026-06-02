@@ -20,13 +20,13 @@ export default function Comparison() {
 
         <div className="rounded-2xl overflow-hidden border border-gray-200 shadow-sm">
           {/* Header */}
-          <div className="grid grid-cols-3 bg-brand-dark">
-            <div className="px-5 py-4 text-sm font-semibold text-white/40 uppercase tracking-wide" />
+          <div className="grid grid-cols-3 bg-brand-blue">
+            <div className="px-5 py-4 text-sm font-semibold text-white/50 uppercase tracking-wide" />
             <div className="px-5 py-4 text-center">
               <span className="text-brand-gold font-bold text-sm sm:text-base">Salem Silver Capital</span>
             </div>
             <div className="px-5 py-4 text-center">
-              <span className="text-white/70 text-sm sm:text-base">Traditional Agent</span>
+              <span className="text-white/75 text-sm sm:text-base">Traditional Agent</span>
             </div>
           </div>
 
