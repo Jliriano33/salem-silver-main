@@ -1,18 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
 
   const scrollToForm = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -23,18 +16,18 @@ export default function Navbar() {
   };
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white shadow-sm' : 'bg-white/90 backdrop-blur-sm'}`}>
+    <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-brand-blue/20 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 sm:h-18">
+        <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex-shrink-0">
-            <div className="flex items-center">
+            <div className="bg-brand-dark rounded-lg px-3 py-1.5">
               <Image
                 src="/images/logo/logo-01.png"
                 alt="Salem Silver Capital"
                 width={180}
                 height={38}
-                className="h-10 w-auto"
+                className="h-9 w-auto"
                 priority
               />
             </div>
@@ -44,7 +37,7 @@ export default function Navbar() {
           <div className="hidden md:flex items-center gap-3">
             <a
               href="tel:+16177142020"
-              className="flex items-center gap-2 text-gray-600 hover:text-gray-900 text-sm font-medium transition-colors"
+              className="flex items-center gap-2 text-brand-blue hover:text-brand-blue-dark text-sm font-semibold transition-colors"
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
@@ -62,12 +55,12 @@ export default function Navbar() {
           </div>
 
           {/* Mobile */}
-          <div className="md:hidden flex items-center gap-2">
-            <a href="tel:+16177142020" className="text-brand-gold font-semibold text-sm">
+          <div className="md:hidden flex items-center gap-3">
+            <a href="tel:+16177142020" className="text-brand-blue font-semibold text-sm">
               (617) 714-2020
             </a>
             <button
-              className="p-2 text-gray-700"
+              className="p-2 text-brand-blue"
               onClick={() => setMenuOpen(!menuOpen)}
               aria-label="Toggle navigation menu"
               aria-expanded={menuOpen}
@@ -84,7 +77,7 @@ export default function Navbar() {
       </div>
 
       {menuOpen && (
-        <div id="mobile-menu" className="md:hidden bg-white border-t border-gray-100 px-4 py-4">
+        <div id="mobile-menu" className="md:hidden bg-white border-t border-brand-blue/10 px-4 py-4">
           <a href="#lead-form" onClick={scrollToForm}
             className="block bg-brand-gold text-white font-semibold text-center py-3 rounded-full mb-2">
             Get My Free Cash Offer
