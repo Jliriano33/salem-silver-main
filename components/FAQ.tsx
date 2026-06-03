@@ -5,7 +5,7 @@ import { useState } from 'react';
 const faqs = [
   {
     q: 'Will you buy my house in any condition?',
-    a: 'Yes — absolutely any condition. Fire damage, water damage, mold, hoarder situations, major structural issues, outdated systems, code violations. We have purchased homes in every imaginable condition across Massachusetts. You don\'t need to clean, repair, or stage anything.',
+    a: 'Yes — absolutely any condition. Fire damage, water damage, mold, hoarder situations, major structural issues, outdated systems, code violations. We have purchased homes in every imaginable condition across Massachusetts, New Hampshire, and Rhode Island. You don\'t need to clean, repair, or stage anything.',
   },
   {
     q: 'How fast can you close?',
@@ -17,7 +17,7 @@ const faqs = [
   },
   {
     q: 'How do you determine your cash offer?',
-    a: 'We evaluate the property\'s current condition, recent comparable sales in your area, and the local Massachusetts market. Our offers are based on real data — we don\'t lowball to fish for desperate sellers. We aim to make a fair offer that works for both parties.',
+    a: 'We evaluate the property\'s current condition, recent comparable sales in your area, and the local market across Massachusetts, New Hampshire, and Rhode Island. Our offers are based on real data — we don\'t lowball to fish for desperate sellers. We aim to make a fair offer that works for both parties.',
   },
   {
     q: 'What situations do you help with?',

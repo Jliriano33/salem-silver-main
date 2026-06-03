@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     template: "%s | Salem Silver Capital",
   },
   description:
-    "Get a fair cash offer for your home in 24 hours. No fees, no repairs, no hassle. Salem Silver Capital buys homes as-is across Massachusetts.",
+    "Get a fair cash offer for your home in 24 hours. No fees, no repairs, no hassle. Salem Silver Capital buys homes as-is across Massachusetts, New Hampshire, and Rhode Island.",
   metadataBase: new URL("https://www.salemsilver.com"),
   alternates: {
     canonical: "https://www.salemsilver.com",
@@ -43,10 +43,7 @@ export const metadata: Metadata = {
     type: "website",
   },
   icons: {
-    icon: "/favicon.ico",
     apple: "/apple-touch-icon.png",
-    // favicon.ico and apple-touch-icon.png should be generated from public/images/logo/logo-03.png
-    // using https://realfavicongenerator.net — place output files in the app/ directory
   },
 };
 

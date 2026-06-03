@@ -4,8 +4,12 @@ interface CTABannerProps {
 
 export default function CTABanner({ onCTAClick }: CTABannerProps) {
   return (
-    <section className="bg-brand-blue py-24 lg:py-32 flex items-center justify-center">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <section
+      className="py-24 lg:py-32 flex items-center justify-center bg-cover bg-center bg-no-repeat relative"
+      style={{ backgroundImage: "url('/images/cta-bg.jpg')" }}
+    >
+      <div className="absolute inset-0 bg-brand-blue/80" />
+      <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4 leading-tight">
           Ready to Get Your{' '}
           <span className="text-brand-gold">Cash Offer?</span>

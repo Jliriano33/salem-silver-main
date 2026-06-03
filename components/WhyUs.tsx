@@ -51,8 +51,8 @@ const features = [
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
       </svg>
     ),
-    title: 'Massachusetts Experts',
-    desc: "We're local investors who know the Massachusetts market inside and out. Fair offers based on real local data.",
+    title: 'MA, NH & RI Experts',
+    desc: "We're local investors who know the Massachusetts, New Hampshire, and Rhode Island markets inside and out. Fair offers based on real local data.",
   },
 ];
 

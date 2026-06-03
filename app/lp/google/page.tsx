@@ -4,9 +4,9 @@ import Script from 'next/script';
 import LeadFormLP from '@/components/LeadFormLP';
 
 export const metadata: Metadata = {
-  title: 'Sell Your House Fast for Cash in Massachusetts',
+  title: 'Sell Your House Fast for Cash in MA, NH & RI',
   description:
-    'Get a fair cash offer for your home in 24 hours. We buy houses as-is across Massachusetts — no repairs, no fees, no agent commissions. Close in as little as 7 days.',
+    'Get a fair cash offer for your home in 24 hours. We buy houses as-is across Massachusetts, New Hampshire, and Rhode Island — no repairs, no fees, no agent commissions. Close in as little as 7 days.',
   alternates: {
     canonical: 'https://www.salemsilver.com/lp/google',
   },
@@ -24,14 +24,18 @@ const localBusinessSchema = {
   telephone: '+16177142020',
   url: 'https://www.salemsilver.com',
   description:
-    'We buy houses for cash in Massachusetts. Fair all-cash offers in 24 hours. No repairs, no fees, any condition.',
-  areaServed: { '@type': 'State', name: 'Massachusetts' },
+    'We buy houses for cash in Massachusetts, New Hampshire, and Rhode Island. Fair all-cash offers in 24 hours. No repairs, no fees, any condition.',
+  areaServed: [
+    { '@type': 'State', name: 'Massachusetts' },
+    { '@type': 'State', name: 'New Hampshire' },
+    { '@type': 'State', name: 'Rhode Island' },
+  ],
   priceRange: '$$',
 };
 
 const faqs = [
   {
-    q: 'How do I sell my house fast for cash in Massachusetts?',
+    q: 'How do I sell my house fast for cash in Massachusetts, New Hampshire, or Rhode Island?',
     a: 'Fill out our short form, receive a cash offer within 24 hours, and close in as little as 7 days. No listings, no showings, no waiting for bank financing.',
   },
   {
@@ -103,7 +107,7 @@ export default function GoogleLP() {
         <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div>
             <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl text-white leading-tight mb-5">
-              Sell Your House Fast for Cash in Massachusetts
+              Sell Your House Fast for Cash in MA, NH & RI
             </h1>
             <p className="text-brand-silver-light text-lg mb-6 leading-relaxed">
               Salem Silver Capital buys homes in any condition. Get a fair all-cash
@@ -112,9 +116,9 @@ export default function GoogleLP() {
             </p>
             <ul className="space-y-2.5 mb-8">
               {[
-                'Licensed & trusted home buyers in MA',
+                'Licensed & trusted home buyers in MA, NH & RI',
                 'Cash in hand — no bank financing delays',
-                'Serving Boston, Worcester, Springfield & all of MA',
+                'Serving Boston, Worcester, Manchester, Providence & beyond',
               ].map((item) => (
                 <li key={item} className="flex items-center gap-3">
                   <span className="w-5 h-5 rounded-full bg-green-500 flex-shrink-0 flex items-center justify-center">
@@ -154,7 +158,7 @@ export default function GoogleLP() {
       <section className="bg-white px-4 sm:px-6 py-14">
         <div className="max-w-5xl mx-auto">
           <h2 className="font-serif text-2xl sm:text-3xl text-brand-blue text-center mb-10">
-            We Help Massachusetts Homeowners In Any Situation
+            We Help Homeowners Across MA, NH & RI In Any Situation
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {whoWeHelp.map((item) => (
@@ -195,7 +199,7 @@ export default function GoogleLP() {
       <section className="bg-white px-4 sm:px-6 py-14">
         <div className="max-w-3xl mx-auto">
           <h2 className="font-serif text-2xl sm:text-3xl text-brand-blue text-center mb-10">
-            Frequently Asked Questions About Selling Your House for Cash in Massachusetts
+            Frequently Asked Questions About Selling Your House for Cash in MA, NH & RI
           </h2>
           <div className="space-y-3">
             {faqs.map((faq, i) => (

@@ -6,7 +6,7 @@ export const runtime = 'edge';
 
 export const metadata = {
   title: 'Get Your Cash Offer | Salem Silver Capital',
-  description: 'Answer a few quick questions to get your fast, no-obligation cash offer for your Massachusetts home.',
+  description: 'Answer a few quick questions to get your fast, no-obligation cash offer for your home in Massachusetts, New Hampshire, or Rhode Island.',
   robots: { index: false },
 };
 

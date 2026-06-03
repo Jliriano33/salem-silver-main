@@ -262,13 +262,26 @@ export default function CashOfferQuiz() {
                 <p className={SUBHEAD}>We&apos;ll use this to pull your home&apos;s market data and prepare your offer.</p>
 
                 {lead.address && !showAddrEdit && (
-                  <div className="flex items-center gap-3 bg-brand-blue/5 border-2 border-brand-blue rounded-xl px-4 py-3 mb-6">
-                    <svg className="w-5 h-5 text-brand-blue flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                    <span className="font-semibold text-brand-blue">{lead.address}</span>
-                  </div>
+                  <>
+                    <div className="flex items-center gap-3 bg-brand-blue/5 border-2 border-brand-blue rounded-xl px-4 py-3 mb-3">
+                      <svg className="w-5 h-5 text-brand-blue flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                      </svg>
+                      <span className="font-semibold text-brand-blue">{lead.address}</span>
+                    </div>
+                    <div className="rounded-xl overflow-hidden border border-gray-200 mb-6">
+                      <iframe
+                        src={`https://maps.google.com/maps?q=${encodeURIComponent(lead.address)}&output=embed&z=17`}
+                        className="w-full h-52"
+                        style={{ border: 0 }}
+                        allowFullScreen
+                        loading="lazy"
+                        referrerPolicy="no-referrer-when-downgrade"
+                        title="Property location on Google Maps"
+                      />
+                    </div>
+                  </>
                 )}
 
                 {showAddrEdit && (

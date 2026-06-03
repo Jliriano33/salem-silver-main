@@ -34,3 +34,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local scripts / credentials
+scripts/.env
+scripts/cf-*.png
+scripts/cf-account-id.txt
+scripts/ghl-webhook-url.txt

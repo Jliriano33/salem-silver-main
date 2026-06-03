@@ -26,11 +26,8 @@ export async function POST(request: Request) {
     return Response.json({ error: 'Invalid JSON body' }, { status: 400 });
   }
 
-  const webhookUrl = process.env.GHL_WEBHOOK_URL;
-
-  if (!webhookUrl) {
-    return Response.json({ error: 'Webhook not configured' }, { status: 500 });
-  }
+  const webhookUrl = process.env.N8N_WEBHOOK_URL
+    ?? 'https://automate.lirianorealty.com/webhook/salem-silver-lead-v2';
 
   const required = ['name', 'phone', 'email', 'address', 'condition', 'timeline'];
   for (const field of required) {
@@ -54,13 +51,24 @@ export async function POST(request: Request) {
     return Response.json({ error: 'Invalid timeline value' }, { status: 400 });
   }
 
+  const fullName = String(body.name).trim().slice(0, 200);
+  const nameParts = fullName.split(' ');
+  const firstName = nameParts[0];
+  const lastName = nameParts.slice(1).join(' ') || firstName;
+
   const payload = {
-    name: String(body.name).trim().slice(0, 200),
+    firstName,
+    lastName,
+    fullName,
     phone: String(body.phone).replace(/\D/g, '').slice(0, 15),
     email: String(body.email).trim().toLowerCase().slice(0, 254),
-    address: String(body.address).trim().slice(0, 500),
-    condition,
-    timeline,
+    address1: String(body.address).trim().slice(0, 500),
+    customField: {
+      property_condition: condition,
+      timeline_to_sell: timeline,
+      lead_source: source,
+    },
+    tags: ['we-buy-homes', source],
     source,
   };
 

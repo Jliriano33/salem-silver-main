@@ -2,8 +2,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 const cities = [
-  'Boston', 'Worcester', 'Springfield', 'Lowell',
-  'Cambridge', 'Brockton', 'Lynn', 'Fall River',
+  'Boston, MA', 'Worcester, MA', 'Springfield, MA', 'Lowell, MA',
+  'Manchester, NH', 'Nashua, NH', 'Concord, NH', 'Portsmouth, NH',
+  'Providence, RI', 'Warwick, RI', 'Cranston, RI', 'Pawtucket, RI',
 ];
 
 const navLinks = [
@@ -59,7 +60,7 @@ export default function Footer() {
 
           {/* Service area */}
           <div>
-            <h3 className="text-white font-semibold mb-4">Serving Massachusetts</h3>
+            <h3 className="text-white font-semibold mb-4">Serving MA, NH & RI</h3>
             <ul className="grid grid-cols-2 gap-1.5">
               {cities.map((city) => (
                 <li key={city} className="text-brand-silver-light text-sm">

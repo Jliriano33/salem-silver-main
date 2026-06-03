@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import clsx from 'clsx';
+import AddressAutocomplete from '@/components/AddressAutocomplete';
 
 interface LeadFormLPProps {
   source: 'facebook-lp' | 'google-lp';
@@ -74,7 +75,7 @@ export default function LeadFormLP({ source }: LeadFormLPProps) {
 
       setSuccess(true);
       const encoded = encodeURIComponent(form.address);
-      setTimeout(() => router.push(`/cash-offer?address=${encoded}`), 1500);
+      setTimeout(() => router.push(`/thank-you?address=${encoded}`), 1500);
     } catch {
       setError('Something went wrong. Please call us at +1 617-714-2020.');
     } finally {
@@ -158,15 +159,14 @@ export default function LeadFormLP({ source }: LeadFormLPProps) {
         <label htmlFor={`lp-address-${source}`} className={labelClass}>
           Property Address *
         </label>
-        <input
+        <AddressAutocomplete
           id={`lp-address-${source}`}
           name="address"
-          type="text"
-          autoComplete="street-address"
-          placeholder="123 Main St, Boston, MA"
           value={form.address}
-          onChange={handleChange}
-          className={inputClass}
+          onChange={(val) => { setForm((prev) => ({ ...prev, address: val })); setError(''); }}
+          placeholder="123 Main St, Boston, MA"
+          inputClassName={inputClass}
+          required
         />
       </div>
 
