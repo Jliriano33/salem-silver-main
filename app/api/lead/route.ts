@@ -1,90 +1,64 @@
+import { NextRequest, NextResponse } from 'next/server';
+
 export const runtime = 'edge';
 
-const ALLOWED_SOURCES = ['website', 'facebook-lp', 'google-lp', 'cash-offer-quiz'] as const;
-type AllowedSource = (typeof ALLOWED_SOURCES)[number];
-
-const CONDITION_VALUES = ['Excellent', 'Good', 'Fair', 'Needs Work', 'Major Repairs Needed'];
-const TIMELINE_VALUES = ['As Soon As Possible', '1-3 Months', '3-6 Months', 'Just Exploring'];
-
-export async function POST(request: Request) {
-  const origin = request.headers.get('origin') ?? '';
-  const referer = request.headers.get('referer') ?? '';
-  const allowedOrigins = ['https://www.salemsilver.com', 'https://cash-offer.salemsilver.com'];
-  const isAllowed =
-    process.env.NODE_ENV !== 'production' ||
-    allowedOrigins.some((o) => origin.startsWith(o) || referer.startsWith(o));
-
-  if (!isAllowed) {
-    return Response.json({ error: 'Forbidden' }, { status: 403 });
-  }
-
-  let body: Record<string, unknown>;
-
+export async function POST(request: NextRequest) {
   try {
-    body = await request.json();
-  } catch {
-    return Response.json({ error: 'Invalid JSON body' }, { status: 400 });
-  }
+    const body = await request.json();
 
-  const webhookUrl = process.env.N8N_WEBHOOK_URL
-    ?? 'https://automate.lirianorealty.com/webhook/salem-silver-lead-v2';
-
-  const required = ['name', 'phone', 'email', 'address', 'condition', 'timeline'];
-  for (const field of required) {
-    if (!body[field] || String(body[field]).trim() === '') {
-      return Response.json({ error: `Missing field: ${field}` }, { status: 400 });
+    const required = ['name', 'phone', 'email', 'address'];
+    const missing = required.filter((f) => !body[f]?.toString().trim());
+    if (missing.length > 0) {
+      return NextResponse.json(
+        { success: false, error: `Missing fields: ${missing.join(', ')}` },
+        { status: 400 }
+      );
     }
-  }
 
-  const source = String(body.source || 'website').trim();
-  if (!ALLOWED_SOURCES.includes(source as AllowedSource)) {
-    return Response.json({ error: 'Invalid source' }, { status: 400 });
-  }
+    const webhookUrl = process.env.N8N_WEBHOOK_URL;
+    if (!webhookUrl) {
+      console.error('[lead] N8N_WEBHOOK_URL is not set');
+      return NextResponse.json(
+        { success: false, error: 'Server configuration error. Please call +1 617-714-2020.' },
+        { status: 500 }
+      );
+    }
 
-  const condition = String(body.condition).trim();
-  if (!CONDITION_VALUES.includes(condition)) {
-    return Response.json({ error: 'Invalid condition value' }, { status: 400 });
-  }
+    const payload = {
+      name:      body.name,
+      phone:     body.phone,
+      email:     body.email,
+      address:   body.address,
+      condition: body.condition ?? '',
+      timeline:  body.timeline ?? '',
+      source:    body.source ?? 'website',
+    };
 
-  const timeline = String(body.timeline).trim();
-  if (!TIMELINE_VALUES.includes(timeline)) {
-    return Response.json({ error: 'Invalid timeline value' }, { status: 400 });
-  }
+    console.log('[lead] Forwarding to n8n:', webhookUrl, JSON.stringify(payload));
 
-  const fullName = String(body.name).trim().slice(0, 200);
-  const nameParts = fullName.split(' ');
-  const firstName = nameParts[0];
-  const lastName = nameParts.slice(1).join(' ') || firstName;
-
-  const payload = {
-    firstName,
-    lastName,
-    fullName,
-    phone: String(body.phone).replace(/\D/g, '').slice(0, 15),
-    email: String(body.email).trim().toLowerCase().slice(0, 254),
-    address1: String(body.address).trim().slice(0, 500),
-    customField: {
-      property_condition: condition,
-      timeline_to_sell: timeline,
-      lead_source: source,
-    },
-    tags: ['we-buy-homes', source],
-    source,
-  };
-
-  try {
     const res = await fetch(webhookUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
     });
 
-    if (!res.ok) {
-      return Response.json({ error: 'Webhook delivery failed' }, { status: 502 });
-    }
-  } catch {
-    return Response.json({ error: 'Webhook unreachable' }, { status: 502 });
-  }
+    const text = await res.text();
+    console.log('[lead] n8n response:', res.status, text);
 
-  return Response.json({ success: true });
+    if (!res.ok) {
+      return NextResponse.json(
+        { success: false, error: 'Submission failed. Please call +1 617-714-2020.' },
+        { status: 502 }
+      );
+    }
+
+    return NextResponse.json({ success: true });
+
+  } catch (err) {
+    console.error('[lead] Unexpected error:', err);
+    return NextResponse.json(
+      { success: false, error: 'Unexpected error. Please call +1 617-714-2020.' },
+      { status: 500 }
+    );
+  }
 }
