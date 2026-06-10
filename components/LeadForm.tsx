@@ -1,6 +1,7 @@
 'use client';
 
 import Script from 'next/script';
+import Link from 'next/link';
 
 export default function LeadForm() {
   return (
@@ -39,7 +40,11 @@ export default function LeadForm() {
         />
 
         <p className="text-gray-400 text-xs text-center mt-4">
-          No obligation. No spam. We respect your privacy.
+          By submitting, you agree to our{' '}
+          <Link href="/privacy-policy" className="underline hover:text-brand-blue transition-colors">
+            Privacy Policy
+          </Link>{' '}
+          and consent to be contacted by phone, text, or email. No obligation. No spam.
         </p>
       </div>
     </section>

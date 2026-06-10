@@ -9,6 +9,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
     },
     {
+      url: 'https://www.salemsilver.com/privacy-policy',
+      lastModified: new Date(),
+      changeFrequency: 'yearly',
+      priority: 0.2,
+    },
+    {
       url: 'https://www.salemsilver.com/thank-you',
       lastModified: new Date(),
       changeFrequency: 'yearly',

@@ -12,6 +12,7 @@ const navLinks = [
   { href: '#how-it-works', label: 'How It Works' },
   { href: '#faq', label: 'FAQ' },
   { href: '/cash-offer', label: 'Get Cash Offer' },
+  { href: '/privacy-policy', label: 'Privacy Policy' },
 ];
 
 export default function Footer() {
