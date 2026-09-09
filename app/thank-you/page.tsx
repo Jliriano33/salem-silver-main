@@ -63,7 +63,9 @@ export default function ThankYou({ searchParams }: ThankYouProps) {
             </a>
           </p>
 
-          {/* Meta Pixel placeholder — add fbq('track', 'Lead') here */}
+          {/* Meta Pixel: Lead fires at submit time (see lib/meta-pixel.ts),
+              NOT here. This page is also reachable directly, and the LP form
+              lands here after submitting, so firing here would double-count. */}
           {/* Google Ads conversion tag placeholder — add gtag('event', 'conversion') here */}
 
           <Link

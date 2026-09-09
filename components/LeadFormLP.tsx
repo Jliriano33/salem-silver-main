@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import clsx from 'clsx';
 import AddressAutocomplete from '@/components/AddressAutocomplete';
+import { trackLead } from '@/lib/meta-pixel';
 
 interface LeadFormLPProps {
   source: 'facebook-lp' | 'google-lp';
@@ -72,6 +73,8 @@ export default function LeadFormLP({ source }: LeadFormLPProps) {
       });
 
       if (!res.ok) throw new Error('failed');
+
+      trackLead({ content_category: 'salem_silver_seller', content_name: source });
 
       setSuccess(true);
       const encoded = encodeURIComponent(form.address);
