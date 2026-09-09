@@ -29,8 +29,18 @@ export async function POST(request: NextRequest) {
       phone:     body.phone,
       email:     body.email,
       address:   body.address,
+      unitNumber: body.unitNumber ?? '',
       condition: body.condition ?? '',
       timeline:  body.timeline ?? '',
+      homeValue: body.homeValue ?? '',
+      sellingReason: body.sellingReason ?? '',
+      features:  body.features ?? '',
+      bedrooms:  body.bedrooms ?? '',
+      bathrooms: body.bathrooms ?? '',
+      lotSize:   body.lotSize ?? '',
+      finishedSqft: body.finishedSqft ?? '',
+      garageSize: body.garageSize ?? '',
+      occupancy: body.occupancy ?? '',
       source:    body.source ?? 'website',
     };
 
