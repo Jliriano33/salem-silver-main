@@ -5,10 +5,15 @@ import { usePathname } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 import { trackPageView } from '@/lib/meta-pixel';
 
-// Inlined at build time, so Cloudflare Pages needs it set as a build variable,
-// not only as a runtime one. Unset means the pixel simply never loads, which is
-// what we want in local dev.
-const PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID;
+// The Liriano Team's Pixel, shared with lirianorealty.com. Meta allows one
+// dataset per ad account, so Salem Silver cannot have its own; the custom
+// conversion "Seller Lead - Salem Silver" separates the two by content_category.
+//
+// Hard-coded on purpose. A pixel id ships in the HTML to every visitor, so it is
+// not a secret, and keeping it in the source means a deploy needs nothing but a
+// push. NEXT_PUBLIC_META_PIXEL_ID still overrides it when we need to point a
+// build somewhere else.
+const PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID ?? '109869655523147';
 
 export default function MetaPixel() {
   const pathname = usePathname();
@@ -28,8 +33,12 @@ export default function MetaPixel() {
 
   return (
     <>
+      {/* The host check keeps localhost and *.pages.dev previews out of the
+          dataset. It is shared with lirianorealty.com and drives ad delivery,
+          so test traffic in it is not harmless. */}
       <Script id="meta-pixel" strategy="afterInteractive">
-        {`!function(f,b,e,v,n,t,s)
+        {`if (/(^|\\.)salemsilver\\.com$/.test(location.hostname)) {
+!function(f,b,e,v,n,t,s)
 {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
 n.callMethod.apply(n,arguments):n.queue.push(arguments)};
 if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
@@ -38,18 +47,15 @@ t.src=v;s=b.getElementsByTagName(e)[0];
 s.parentNode.insertBefore(t,s)}(window,document,'script',
 'https://connect.facebook.net/en_US/fbevents.js');
 fbq('init', '${PIXEL_ID}');
-fbq('track', 'PageView');`}
+fbq('track', 'PageView');
+}`}
       </Script>
-      <noscript>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          height="1"
-          width="1"
-          style={{ display: 'none' }}
-          alt=""
-          src={`https://www.facebook.com/tr?id=${PIXEL_ID}&ev=PageView&noscript=1`}
-        />
-      </noscript>
+      {/* No <noscript> fallback on purpose. Next preloads the image inside it,
+          and the browser fetches that preload even with scripting on, which
+          sends a PageView from localhost and from previews, straight past the
+          host check above. It would buy us nothing anyway: every conversion
+          path here (the quiz, the LP form, the router) needs JavaScript, so a
+          visitor without it cannot convert. */}
     </>
   );
 }
