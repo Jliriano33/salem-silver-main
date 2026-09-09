@@ -46,6 +46,14 @@ export const metadata: Metadata = {
   icons: {
     apple: "/apple-touch-icon.png",
   },
+  verification: {
+    // Proves to Meta that we own salemsilver.com. Without it the pixel still
+    // fires, but the domain cannot be claimed in Business Settings and we lose
+    // Aggregated Event Measurement, which is what carries iOS conversions.
+    other: {
+      "facebook-domain-verification": "mz9wx4cix1np5aww3277vtr5skdrmb",
+    },
+  },
 };
 
 export default function RootLayout({
