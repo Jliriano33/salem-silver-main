@@ -2,9 +2,11 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import clsx from 'clsx';
 import AddressAutocomplete from '@/components/AddressAutocomplete';
 import { trackLead } from '@/lib/meta-pixel';
+import { CONSENT_TEXT, CONSENT_VERSION } from '@/lib/consent';
 
 interface LeadFormLPProps {
   source: 'facebook-lp' | 'google-lp';
@@ -31,6 +33,7 @@ const initialForm: FormData = {
 export default function LeadFormLP({ source }: LeadFormLPProps) {
   const router = useRouter();
   const [form, setForm] = useState<FormData>(initialForm);
+  const [consent, setConsent] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
@@ -51,6 +54,7 @@ export default function LeadFormLP({ source }: LeadFormLPProps) {
     if (!form.address.trim()) return 'Please enter the property address.';
     if (!form.condition) return 'Please select the property condition.';
     if (!form.timeline) return 'Please select your timeline.';
+    if (!consent) return 'Please check the box to agree to be contacted.';
     return '';
   };
 
@@ -69,7 +73,13 @@ export default function LeadFormLP({ source }: LeadFormLPProps) {
       const res = await fetch('/api/lead', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...form, source }),
+        body: JSON.stringify({
+          ...form,
+          source,
+          consent: true,
+          consent_version: CONSENT_VERSION,
+          source_page: window.location.pathname,
+        }),
       });
 
       if (!res.ok) throw new Error('failed');
@@ -211,6 +221,26 @@ export default function LeadFormLP({ source }: LeadFormLPProps) {
             <option value="Just Exploring">Just Exploring</option>
           </select>
         </div>
+      </div>
+
+      {/* Contact consent: unchecked by default, submit is blocked until checked */}
+      <div className="flex items-start gap-3 pt-1">
+        <input
+          id={`consent-${source}`}
+          name="consent"
+          type="checkbox"
+          checked={consent}
+          onChange={(e) => { setConsent(e.target.checked); setError(''); }}
+          className="mt-0.5 h-6 w-6 shrink-0 cursor-pointer rounded border-white accent-brand-gold focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-blue-dark"
+        />
+        <p className="text-white text-sm leading-relaxed">
+          <label htmlFor={`consent-${source}`} className="cursor-pointer">
+            {CONSENT_TEXT}
+          </label>{' '}
+          <Link href="/privacy-policy" className="underline hover:text-brand-gold">
+            Privacy Policy
+          </Link>
+        </p>
       </div>
 
       <div

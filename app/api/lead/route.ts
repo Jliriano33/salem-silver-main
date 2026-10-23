@@ -15,6 +15,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    if (body.consent !== true) {
+      return NextResponse.json(
+        { success: false, error: 'Consent to be contacted is required.' },
+        { status: 400 }
+      );
+    }
+
     const webhookUrl = process.env.N8N_WEBHOOK_URL;
     if (!webhookUrl) {
       console.error('[lead] N8N_WEBHOOK_URL is not set');
@@ -42,6 +49,10 @@ export async function POST(request: NextRequest) {
       garageSize: body.garageSize ?? '',
       occupancy: body.occupancy ?? '',
       source:    body.source ?? 'website',
+      consent:   true,
+      consent_version: String(body.consent_version ?? '').slice(0, 64),
+      consent_at: new Date().toISOString(),
+      source_page: String(body.source_page ?? '').slice(0, 200),
     };
 
     console.log('[lead] Forwarding to n8n:', webhookUrl, JSON.stringify(payload));
