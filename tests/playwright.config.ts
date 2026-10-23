@@ -1,6 +1,6 @@
 import path from 'node:path';
 import { defineConfig, devices } from '@playwright/test';
-import { SERVER_LOG, WEBHOOK_URL } from './test-env';
+import { BAD_SERVER, BAD_SERVER_LOG, BAD_WEBHOOK_URL, SERVER_LOG, WEBHOOK_URL } from './test-env';
 
 // Run `npm run build` first. Then: npx playwright test -c tests/playwright.config.ts
 const root = path.resolve(__dirname, '..');
@@ -29,6 +29,14 @@ export default defineConfig({
       reuseExistingServer: false,
       timeout: 120_000,
       env: { N8N_WEBHOOK_URL: WEBHOOK_URL },
+    },
+    {
+      command: `npx next start -p ${new URL(BAD_SERVER).port} -H 127.0.0.1 > "${BAD_SERVER_LOG}" 2>&1`,
+      cwd: root,
+      url: `${BAD_SERVER}/lp/google`,
+      reuseExistingServer: false,
+      timeout: 120_000,
+      env: { N8N_WEBHOOK_URL: BAD_WEBHOOK_URL },
     },
   ],
 });

@@ -64,8 +64,9 @@ export async function POST(request: NextRequest) {
       body: JSON.stringify(payload),
     });
 
+    // Log the status and size only: n8n's error replies repeat the webhook path (F-050).
     const text = await res.text();
-    console.log('[lead] n8n response:', res.status, text);
+    console.log('[lead] n8n response:', res.status, `(${text.length} bytes)`);
 
     if (!res.ok) {
       return NextResponse.json(
@@ -77,7 +78,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: true });
 
   } catch (err) {
-    console.error('[lead] Unexpected error:', err);
+    // The error's name only: a fetch error's message can carry the webhook URL (F-050).
+    console.error('[lead] Unexpected error:', err instanceof Error ? err.name : typeof err);
     return NextResponse.json(
       { success: false, error: 'Unexpected error. Please call +1 617-714-2020.' },
       { status: 500 }
