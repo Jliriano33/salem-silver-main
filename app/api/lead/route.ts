@@ -55,7 +55,8 @@ export async function POST(request: NextRequest) {
       source_page: String(body.source_page ?? '').slice(0, 200),
     };
 
-    console.log('[lead] Forwarding to n8n:', webhookUrl, JSON.stringify(payload));
+    // Never log webhookUrl: it is the intake's only secret, and this log is Cloudflare's function log (F-050).
+    console.log('[lead] Forwarding to n8n:', JSON.stringify(payload));
 
     const res = await fetch(webhookUrl, {
       method: 'POST',
