@@ -8,6 +8,8 @@ import { EXPECTED_ERROR, EXPECTED_TEXT, EXPECTED_VERSION, REQUIRED_PHRASES } fro
 const ECHO = 'http://127.0.0.1:3199';
 const FAKE = { name: 'TEST SS2 Audit', phone: '6175550100', email: 'test-ss2@example.com' };
 const QUIZ_ADDRESS = '1 Audit Test Way, Nowhere, MA';
+// The quiz address carries a unit, so step 2 runs and unitNumber is non-empty.
+const QUIZ_UNIT_ADDRESS = '1 Audit Test Way, Unit 2B, Nowhere, MA';
 
 type FormCase = { formId: 'google-lp' | 'facebook-lp' | 'quiz'; path: string };
 const FORMS: FormCase[] = [
@@ -24,6 +26,45 @@ const QUIZ_KEYS = [
   'occupancy', 'source',
 ];
 const CONSENT_KEYS = ['consent', 'consent_version', 'source_page'];
+
+// The exact request each form must send for the fake data below (first choice at every quiz step,
+// unit 2B, 1800 sq ft, the Pool feature), written out independently of the components.
+function expectedRequest(form: FormCase): Record<string, unknown> {
+  const consent = { consent: true, consent_version: EXPECTED_VERSION, source_page: form.path };
+  if (form.formId === 'quiz') {
+    return {
+      name: FAKE.name, phone: FAKE.phone, email: FAKE.email, address: QUIZ_UNIT_ADDRESS, unitNumber: '2B',
+      condition: 'Excellent', timeline: 'As Soon As Possible', homeValue: '$300K or less',
+      sellingReason: 'Looking to buy a home', features: 'Pool', bedrooms: '3', bathrooms: '2',
+      lotSize: '0.5_acres_or_less', finishedSqft: '1800', garageSize: 'none', occupancy: 'owner_occupied',
+      source: 'cash-offer-quiz', ...consent,
+    };
+  }
+  return {
+    name: FAKE.name, phone: FAKE.phone, email: FAKE.email, address: QUIZ_ADDRESS,
+    condition: 'Good', timeline: 'Just Exploring', source: form.formId, ...consent,
+  };
+}
+
+// What /api/lead forwards: every key of its fixed payload, '' where the form sent nothing.
+const FORWARDED_KEYS = [
+  'name', 'phone', 'email', 'address', 'unitNumber', 'condition', 'timeline', 'homeValue', 'sellingReason',
+  'features', 'bedrooms', 'bathrooms', 'lotSize', 'finishedSqft', 'garageSize', 'occupancy', 'source',
+  'consent', 'consent_version', 'source_page',
+];
+
+/** True when a computed box-shadow draws at least one non-transparent ring with spread >= 1px. */
+function hasVisibleRing(shadow: string): boolean {
+  if (!shadow || shadow === 'none') return false;
+  const parts = shadow.split(/,(?![^(]*\))/).map((p) => p.trim());
+  return parts.some((part) => {
+    const color = part.match(/rgba?\(([^)]*)\)/);
+    const alpha = color ? Number((color[1].split(',')[3] ?? '1').trim()) : 1;
+    const lengths = part.replace(/rgba?\([^)]*\)/, '').trim().split(/\s+/).map((v) => parseFloat(v));
+    const spread = lengths.length >= 4 ? lengths[3] : 0;
+    return alpha > 0 && spread >= 1;
+  });
+}
 
 const BLOCKED = [
   /(^|\.)facebook\.com$/,
@@ -53,20 +94,25 @@ const pause = (page: Page, ms = 450) => page.waitForTimeout(ms);
 /** Fills the form with fake data and returns its submit button (not clicked). */
 async function reachSubmit(page: Page, form: FormCase, opts: { skipEmail?: boolean } = {}): Promise<Locator> {
   if (form.formId === 'quiz') {
-    await page.goto(`/cash-offer?address=${encodeURIComponent(QUIZ_ADDRESS)}`);
+    await page.goto(`/cash-offer?address=${encodeURIComponent(QUIZ_UNIT_ADDRESS)}`);
     const pane = page.locator('div.bg-white.rounded-2xl').first();
     const firstChoice = () => pane.locator('button').filter({ hasNotText: 'Back' }).first();
 
     await page.getByRole('button', { name: /Yes, that/ }).click();
     await pause(page);
+    await expect(page.locator('input[placeholder="Enter unit number"]')).toHaveValue('2B');
+    await pane.getByRole('button', { name: /Continue/ }).click(); // step 2, unit confirmed
+    await pause(page);
     for (let i = 0; i < 4; i++) {
       await firstChoice().click();
       await pause(page);
     }
+    await page.locator('input[type=number]').fill('1800'); // step 7, finished square feet
     await page.getByRole('button', { name: /Continue/ }).click();
     await pause(page);
     await firstChoice().click();
     await pause(page);
+    await pane.getByRole('button', { name: /Pool/ }).click(); // step 9, one feature
     await page.getByRole('button', { name: /Continue/ }).click();
     await pause(page);
     await page.locator('input[placeholder="Enter your full name"]').fill(FAKE.name);
@@ -133,7 +179,15 @@ for (const form of FORMS) {
       await page.keyboard.press('Tab');
       await expect(box).toBeFocused();
       const ring = await box.evaluate((el) => getComputedStyle(el).boxShadow);
-      expect(ring, 'focus-visible ring on the checkbox').not.toBe('none');
+      expect(hasVisibleRing(ring), `visible focus ring on the checkbox (box-shadow: ${ring})`).toBe(true);
+      // Negative control: with the ring suppressed, the same check must fail.
+      const suppressed = await box.evaluate((el) => {
+        (el as HTMLElement).style.setProperty('box-shadow', 'rgba(0, 0, 0, 0) 0px 0px 0px 0px', 'important');
+        const v = getComputedStyle(el).boxShadow;
+        (el as HTMLElement).style.removeProperty('box-shadow');
+        return v;
+      });
+      expect(hasVisibleRing(suppressed), 'suppressed ring must not count as visible').toBe(false);
 
       await page.keyboard.press('Space');
       await expect(box).toBeChecked();
@@ -174,12 +228,13 @@ for (const form of FORMS) {
       const body = req.postDataJSON() as Record<string, unknown>;
       const keys = [...(form.formId === 'quiz' ? QUIZ_KEYS : LP_KEYS), ...CONSENT_KEYS].sort();
       expect(Object.keys(body).sort()).toEqual(keys);
+      expect(body).toEqual(expectedRequest(form));
       expect(body.consent).toBe(true);
       expect(body.consent_version).toBe(EXPECTED_VERSION);
       expect(body.source_page).toBe(form.path);
       expect(body.name).toBe(FAKE.name);
       expect(body.email).toBe(FAKE.email);
-      expect(body.address).toBe(QUIZ_ADDRESS);
+      expect(body.address).toBe(expectedRequest(form).address);
       if (form.formId === 'quiz') {
         expect(body.phone).toBe(FAKE.phone);
         expect(body.source).toBe('cash-offer-quiz');
@@ -194,17 +249,22 @@ for (const form of FORMS) {
         expect(body.timeline).toBe('Just Exploring');
       }
 
-      // The API forwarded the same values to the (local) webhook, with server-side consent_at.
+      // The API forwarded every value unchanged, with a server-side consent_at.
+      let forwarded: Record<string, unknown>[] = [];
       await expect
         .poll(async () => {
-          const res = await request.get(`${ECHO}/all`);
-          const all = (await res.json()) as Record<string, unknown>[];
-          return all.filter((b) =>
-            b.consent === true && b.consent_version === EXPECTED_VERSION && b.source_page === form.path &&
-            b.name === FAKE.name && b.email === FAKE.email && typeof b.consent_at === 'string'
-          ).length;
+          forwarded = (await (await request.get(`${ECHO}/all`)).json()) as Record<string, unknown>[];
+          return forwarded.length;
         }, { timeout: 10_000 })
         .toBe(1);
+      const sentBody = expectedRequest(form);
+      const hooked = forwarded[0];
+      for (const key of FORWARDED_KEYS) {
+        const want = key === 'consent' ? true : (sentBody[key] ?? '');
+        expect(hooked[key], `forwarded ${key}`).toEqual(want);
+      }
+      expect(typeof hooked.consent_at).toBe('string');
+      expect(Math.abs(Date.now() - Date.parse(hooked.consent_at as string))).toBeLessThan(2 * 60 * 1000);
     });
 
     if (form.formId !== 'quiz') {
