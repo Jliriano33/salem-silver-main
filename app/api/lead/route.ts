@@ -15,6 +15,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    if (body.consent !== true) {
+      return NextResponse.json(
+        { success: false, error: 'Consent to be contacted is required.' },
+        { status: 400 }
+      );
+    }
+
     const webhookUrl = process.env.N8N_WEBHOOK_URL;
     if (!webhookUrl) {
       console.error('[lead] N8N_WEBHOOK_URL is not set');
@@ -42,9 +49,14 @@ export async function POST(request: NextRequest) {
       garageSize: body.garageSize ?? '',
       occupancy: body.occupancy ?? '',
       source:    body.source ?? 'website',
+      consent:   true,
+      consent_version: String(body.consent_version ?? '').slice(0, 64),
+      consent_at: new Date().toISOString(),
+      source_page: String(body.source_page ?? '').slice(0, 200),
     };
 
-    console.log('[lead] Forwarding to n8n:', webhookUrl, JSON.stringify(payload));
+    // Never log webhookUrl: it is the intake's only secret, and this log is Cloudflare's function log (F-050).
+    console.log('[lead] Forwarding to n8n:', JSON.stringify(payload));
 
     const res = await fetch(webhookUrl, {
       method: 'POST',
@@ -52,8 +64,9 @@ export async function POST(request: NextRequest) {
       body: JSON.stringify(payload),
     });
 
+    // Log the status and size only: n8n's error replies repeat the webhook path (F-050).
     const text = await res.text();
-    console.log('[lead] n8n response:', res.status, text);
+    console.log('[lead] n8n response:', res.status, `(${text.length} bytes)`);
 
     if (!res.ok) {
       return NextResponse.json(
@@ -65,7 +78,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: true });
 
   } catch (err) {
-    console.error('[lead] Unexpected error:', err);
+    // The error's name only: a fetch error's message can carry the webhook URL (F-050).
+    console.error('[lead] Unexpected error:', err instanceof Error ? err.name : typeof err);
     return NextResponse.json(
       { success: false, error: 'Unexpected error. Please call +1 617-714-2020.' },
       { status: 500 }

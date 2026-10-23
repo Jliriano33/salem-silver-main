@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { trackLead } from '@/lib/meta-pixel';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import { CONSENT_ERROR, CONSENT_TEXT, CONSENT_VERSION } from '@/lib/consent';
 
 // ── Value maps ────────────────────────────────────────────────────────────────
 const CONDITION_API: Record<string, string> = {
@@ -124,6 +125,7 @@ export default function CashOfferQuiz() {
   const [editedAddr, setEditedAddr] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [errors, setErrors]         = useState<Partial<Record<string, string>>>({});
+  const [consent, setConsent]       = useState(false);
 
   const [lead, setLead] = useState<Lead>({
     address:         searchParams.get('address') || '',
@@ -213,9 +215,10 @@ export default function CashOfferQuiz() {
 
   // ── Step 11: phone + submit ──────────────────────────────────────────────
   const submitPhone = async () => {
-    if (!/^[\d\s\-\+\(\)\.]{7,20}$/.test(lead.phone)) {
-      setErrors({ phone: 'Please enter a valid phone number.' }); return;
-    }
+    const errs: Record<string, string> = {};
+    if (!/^[\d\s\-\+\(\)\.]{7,20}$/.test(lead.phone)) errs.phone = 'Please enter a valid phone number.';
+    if (!consent) errs.consent = CONSENT_ERROR;
+    if (Object.keys(errs).length) { setErrors(errs); return; }
     setErrors({});
     setSubmitting(true);
     try {
@@ -240,6 +243,9 @@ export default function CashOfferQuiz() {
           garageSize: lead.garageSize,
           occupancy: lead.occupancy,
           source:    'cash-offer-quiz',
+          consent:   true,
+          consent_version: CONSENT_VERSION,
+          source_page: window.location.pathname,
         }),
       });
 
@@ -734,6 +740,31 @@ export default function CashOfferQuiz() {
                   {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
                 </div>
 
+                {/* Contact consent: unchecked by default, submit is blocked until checked */}
+                <div className="mt-5">
+                  <div className="flex items-start gap-3">
+                    <input
+                      id="consent-quiz"
+                      name="consent"
+                      type="checkbox"
+                      checked={consent}
+                      onChange={e => { setConsent(e.target.checked); setErrors(p => ({ ...p, consent: '' })); }}
+                      aria-invalid={errors.consent ? true : undefined}
+                      aria-describedby={errors.consent ? 'consent-quiz-error' : undefined}
+                      className="mt-0.5 h-6 w-6 shrink-0 cursor-pointer rounded border-gray-400 accent-brand-blue focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue focus-visible:ring-offset-2"
+                    />
+                    <p className="text-sm text-gray-700 leading-relaxed">
+                      <label htmlFor="consent-quiz" className="cursor-pointer">
+                        {CONSENT_TEXT}
+                      </label>{' '}
+                      <Link href="/privacy-policy" className="text-brand-blue underline hover:no-underline">Privacy Policy</Link>
+                    </p>
+                  </div>
+                  {errors.consent && (
+                    <p id="consent-quiz-error" role="alert" className="text-red-600 text-sm mt-2">{errors.consent}</p>
+                  )}
+                </div>
+
                 <button
                   onClick={submitPhone}
                   disabled={submitting}
@@ -750,12 +781,6 @@ export default function CashOfferQuiz() {
                   ) : 'Get My Cash Offer →'}
                 </button>
                 <button onClick={() => go(10)} className={BTN_BACK}>← Back</button>
-
-                <p className="text-xs text-gray-400 mt-4 leading-relaxed">
-                  By submitting, you consent to receive calls and texts from Salem Silver. Reply STOP to opt out.{' '}
-                  <Link href="/privacy-policy" className="text-brand-blue hover:underline">Privacy Policy</Link>{' '}·{' '}
-                  <Link href="/terms" className="text-brand-blue hover:underline">Terms</Link>
-                </p>
               </div>
             )}
 
