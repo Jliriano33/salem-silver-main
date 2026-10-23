@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { trackLead } from '@/lib/meta-pixel';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { CONSENT_TEXT, CONSENT_VERSION } from '@/lib/consent';
+import { CONSENT_ERROR, CONSENT_TEXT, CONSENT_VERSION } from '@/lib/consent';
 
 // ── Value maps ────────────────────────────────────────────────────────────────
 const CONDITION_API: Record<string, string> = {
@@ -217,7 +217,7 @@ export default function CashOfferQuiz() {
   const submitPhone = async () => {
     const errs: Record<string, string> = {};
     if (!/^[\d\s\-\+\(\)\.]{7,20}$/.test(lead.phone)) errs.phone = 'Please enter a valid phone number.';
-    if (!consent) errs.consent = 'Please check the box to agree to be contacted.';
+    if (!consent) errs.consent = CONSENT_ERROR;
     if (Object.keys(errs).length) { setErrors(errs); return; }
     setErrors({});
     setSubmitting(true);

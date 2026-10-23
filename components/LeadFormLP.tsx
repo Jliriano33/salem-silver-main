@@ -6,7 +6,7 @@ import Link from 'next/link';
 import clsx from 'clsx';
 import AddressAutocomplete from '@/components/AddressAutocomplete';
 import { trackLead } from '@/lib/meta-pixel';
-import { CONSENT_TEXT, CONSENT_VERSION } from '@/lib/consent';
+import { CONSENT_ERROR, CONSENT_TEXT, CONSENT_VERSION } from '@/lib/consent';
 
 interface LeadFormLPProps {
   source: 'facebook-lp' | 'google-lp';
@@ -45,7 +45,7 @@ export default function LeadFormLP({ source }: LeadFormLPProps) {
     setError('');
   };
 
-  const validate = (): string => {
+  const validateFields = (): string => {
     if (!form.name.trim()) return 'Please enter your full name.';
     if (form.phone.replace(/\D/g, '').length < 10)
       return 'Please enter a valid 10-digit phone number.';
@@ -54,9 +54,17 @@ export default function LeadFormLP({ source }: LeadFormLPProps) {
     if (!form.address.trim()) return 'Please enter the property address.';
     if (!form.condition) return 'Please select the property condition.';
     if (!form.timeline) return 'Please select your timeline.';
-    if (!consent) return 'Please check the box to agree to be contacted.';
     return '';
   };
+
+  // The consent message is shown even when a field is also missing, so the
+  // visitor learns about the box on the first try rather than the last.
+  const validate = (): string => {
+    const fieldError = validateFields();
+    if (!consent) return fieldError ? `${fieldError} ${CONSENT_ERROR}` : CONSENT_ERROR;
+    return fieldError;
+  };
+  const consentInvalid = !consent && error.includes(CONSENT_ERROR);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -231,6 +239,8 @@ export default function LeadFormLP({ source }: LeadFormLPProps) {
           type="checkbox"
           checked={consent}
           onChange={(e) => { setConsent(e.target.checked); setError(''); }}
+          aria-invalid={consentInvalid ? true : undefined}
+          aria-describedby={consentInvalid ? `lp-error-${source}` : undefined}
           className="mt-0.5 h-6 w-6 shrink-0 cursor-pointer rounded border-white accent-brand-gold focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-blue-dark"
         />
         <p className="text-white text-sm leading-relaxed">
@@ -244,6 +254,7 @@ export default function LeadFormLP({ source }: LeadFormLPProps) {
       </div>
 
       <div
+        id={`lp-error-${source}`}
         role="alert"
         aria-live="assertive"
         aria-atomic="true"
