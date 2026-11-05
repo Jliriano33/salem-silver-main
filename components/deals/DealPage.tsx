@@ -215,7 +215,7 @@ export default function DealPage({ deal, locale, ui }: { deal: Deal; locale: Loc
                 {t(L.status)}
                 {typeStr && ` · ${typeStr}`}
               </p>
-              <div className="mt-3 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+              <div className="mt-3 flex flex-col gap-4">
                 <div className="min-w-0">
                   <h1 id="deal-address" className="break-words font-serif text-3xl font-bold leading-tight text-brand-navy sm:text-4xl">
                     {street}
