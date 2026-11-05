@@ -29,6 +29,42 @@ export type DealUiStrings = {
   description: { heading: L10n };
   /** Shown text for any field that is still a placeholder on a preview build. */
   pending: L10n; // "To be announced"
+  /** Listing-style layout (Nov 5): crumbs, status line, key facts, facts and features, side card. */
+  listing: {
+    crumbRoot: L10n; // "Investment properties"
+    status: L10n; // "Assignment of contract"
+    perSqft: L10n; // "per sq ft"
+    seeAll: L10n; // "See all {total} photos"
+    keyFacts: L10n;
+    units: L10n;
+    halfBaths: L10n;
+    parking: L10n;
+    basement: L10n;
+    annualTaxes: L10n;
+    assessedValue: L10n;
+    factsHeading: L10n; // "Facts and features"
+    interior: L10n;
+    exterior: L10n;
+    construction: L10n;
+    conditionHeading: L10n; // "Property condition and systems"
+    condition: {
+      overall: L10n;
+      occupancy: L10n;
+      roofAge: L10n;
+      heatingSystem: L10n;
+      heatingAge: L10n;
+      airConditioning: L10n;
+      foundationType: L10n;
+      foundationCondition: L10n;
+      electrical: L10n;
+      plumbing: L10n;
+      waterHeater: L10n;
+    };
+    documents: L10n;
+    requestDetails: L10n; // side-card button to the form
+    call: L10n;
+    pofLine: L10n; // "Proof of funds required"
+  };
   /** REVIEW: assignment of contract, proof of funds, estimates to verify. */
   notice: { heading: L10n; body: L10n; short: L10n }; // short: one line under the price
   form: {

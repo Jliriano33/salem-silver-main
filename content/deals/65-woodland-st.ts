@@ -16,8 +16,30 @@ const deal: Deal = {
     lotSize: 'PLACEHOLDER_LOT_SIZE',
     yearBuilt: 'PLACEHOLDER_YEAR_BUILT',
     propertyType: 'PLACEHOLDER_PROPERTY_TYPE',
+    // Set any of these to null to hide the row.
+    halfBaths: 'PLACEHOLDER_HALF_BATHS',
+    units: 'PLACEHOLDER_UNITS',
+    parking: 'PLACEHOLDER_PARKING',
+    basement: 'PLACEHOLDER_BASEMENT',
+    annualTaxes: 'PLACEHOLDER_ANNUAL_TAXES',
+    assessedValue: 'PLACEHOLDER_ASSESSED_VALUE',
   },
-  numbers: { estimatedRepairs: 'PLACEHOLDER_REPAIRS', arv: 'PLACEHOLDER_ARV', showSpread: false },
+  // Condition and systems. Text values, e.g. { en: 'Major repair', es: 'Reparación mayor' }.
+  // "Unknown" / "Desconocido" is a fine answer; null hides the row.
+  condition: {
+    overall: 'PLACEHOLDER_CONDITION',
+    occupancy: 'PLACEHOLDER_OCCUPANCY',
+    roofAge: 'PLACEHOLDER_ROOF_AGE',
+    heatingSystem: 'PLACEHOLDER_HEATING_SYSTEM',
+    heatingAge: 'PLACEHOLDER_HEATING_AGE',
+    airConditioning: 'PLACEHOLDER_AIR_CONDITIONING',
+    foundationType: 'PLACEHOLDER_FOUNDATION_TYPE',
+    foundationCondition: 'PLACEHOLDER_FOUNDATION_CONDITION',
+    electrical: 'PLACEHOLDER_ELECTRICAL',
+    plumbing: 'PLACEHOLDER_PLUMBING',
+    waterHeater: 'PLACEHOLDER_WATER_HEATER',
+  },
+  numbers: { estimatedRepairs: 'PLACEHOLDER_REPAIRS', estimatedRepairsHigh: 'PLACEHOLDER_REPAIRS_HIGH', arv: 'PLACEHOLDER_ARV', showSpread: false },
   description: 'PLACEHOLDER_DESCRIPTION',
   photos: [
     { file: '01.jpg', alt: { en: 'Photo 1 of 65 Woodland St', es: 'Foto 1 de 65 Woodland St' } },
@@ -31,6 +53,8 @@ const deal: Deal = {
     { file: '09.jpg', alt: { en: 'Photo 9 of 65 Woodland St', es: 'Foto 9 de 65 Woodland St' } },
     { file: '10.jpg', alt: { en: 'Photo 10 of 65 Woodland St', es: 'Foto 10 de 65 Woodland St' } },
   ],
+  // Optional files in public/deals/65-woodland-st/docs/. Never the purchase contract or any document about the sale or its parties.
+  documents: [],
   seo: {
     title: {
       en: '65 Woodland St, Lawrence, MA 01841 | Investment Property | Salem Silver Capital',

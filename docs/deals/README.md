@@ -10,8 +10,10 @@ content file plus one photo folder. No code changes are needed.
 3. Fill every field. An unknown value stays as its `PLACEHOLDER_*` string until it arrives:
    - `address`: street, city, state, zip
    - `price.asking` and `price.assignmentFee` (use `null` for the fee to hide that line)
-   - `details`: beds, baths, sqft, lotSize (EN and ES), yearBuilt, propertyType (EN and ES)
-   - `numbers`: estimatedRepairs, arv (leave `showSpread: false`)
+   - `details`: beds, baths, sqft, lotSize (EN and ES), yearBuilt, propertyType (EN and ES), halfBaths, units, parking, basement, annualTaxes, assessedValue (any of the last six can be `null` to hide the row)
+   - `condition`: overall condition and occupancy (required), then roofAge, heatingSystem, heatingAge, airConditioning, foundationType, foundationCondition, electrical, plumbing, waterHeater (each EN and ES text such as "8 years" or "Unknown", or `null` to hide)
+   - `numbers`: estimatedRepairs, estimatedRepairsHigh (the top of a range, or `null` for one figure), arv (leave `showSpread: false`)
+   - `documents`: optional files in `public/deals/<slug>/docs/` with an EN and ES label (an inspection or permit history; never the purchase contract or anything about the sale)
    - `description` (EN and ES)
    - `photos`: one entry per file, with neutral alt text in EN and ES
    - `seo.title` and `seo.description` (EN and ES)
@@ -48,8 +50,12 @@ The file `content/deals/65-woodland-st.ts` is already in place as a draft (`publ
 - [ ] Lot size (for example "0.18 acres")
 - [ ] Year built
 - [ ] Property type (for example single-family or 2-family)
-- [ ] Estimated repairs
+- [ ] Estimated repairs (one figure, or a low and high range)
 - [ ] ARV
+- [ ] Half baths, units (for 2-4 family), parking, basement, annual taxes, assessed value (say "hide" for any you do not want shown)
+- [ ] Property condition (for example major repair, cosmetic, turnkey) and occupancy (vacant, owner-occupied, tenant-occupied)
+- [ ] Roof age, heating system and its age, air conditioning, foundation type and condition, electrical, plumbing, water heater ("Unknown" is fine; "hide" removes the row)
+- [ ] Any documents to attach (optional)
 - [ ] Description, in English and Spanish, or in English only and Claude translates it for review
 - [ ] Photos, 10 files in display order, named `01.jpg` to `10.jpg` (if there are fewer or more, tell Claude so the photo list matches)
 - [ ] Decision on `indexable` (default: not indexed)

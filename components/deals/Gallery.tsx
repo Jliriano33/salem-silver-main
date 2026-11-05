@@ -11,6 +11,7 @@ export type GalleryLabels = {
   next: string;
   prev: string;
   counter: string; // contains {n} and {total}
+  seeAll: string; // contains {total}
 };
 
 const fill = (tpl: string, n: number, total: number) =>
@@ -125,35 +126,52 @@ export default function Gallery({ photos, labels }: { photos: GalleryPhoto[]; la
   const btn =
     'inline-flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/25 focus:outline-none focus-visible:ring-2 focus-visible:ring-white';
 
+  // Listing-style mosaic: the hero on the left, up to four tiles on the right (md and up).
+  // On phones only the hero shows, with a "See all" button under it.
+  const tiles = photos.slice(1, 5);
+  const tileBtn =
+    'relative block h-full w-full overflow-hidden bg-[#e5e7eb] focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-blue';
+
   return (
     <div>
-      <button
-        type="button"
-        onClick={(e) => open(0, e.currentTarget)}
-        aria-label={openLabel(0)}
-        className="block w-full overflow-hidden rounded-xl bg-[#e5e7eb] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue focus-visible:ring-offset-2"
-      >
-        <Frame photo={photos[0]} label={labels.comingSoon} eager className="aspect-[4/3] w-full sm:aspect-[16/10]" />
-      </button>
-
+      <div className="grid gap-2 overflow-hidden rounded-xl md:h-[440px] md:grid-cols-4 md:grid-rows-2">
+        <button
+          type="button"
+          onClick={(e) => open(0, e.currentTarget)}
+          aria-label={openLabel(0)}
+          className={`${tileBtn} md:col-span-2 md:row-span-2`}
+        >
+          <Frame photo={photos[0]} label={labels.comingSoon} eager className="aspect-[4/3] h-full w-full md:aspect-auto" />
+        </button>
+        {tiles.map((p, k) => {
+          const i = k + 1;
+          const more = i === 4 && total > 5;
+          return (
+            <button
+              key={i}
+              type="button"
+              onClick={(e) => open(i, e.currentTarget)}
+              aria-label={more ? fill(labels.seeAll, 0, total) : openLabel(i)}
+              className={`${tileBtn} hidden md:block`}
+            >
+              <Frame photo={p} label={labels.comingSoon} className="h-full w-full !text-xs" />
+              {more && (
+                <span className="absolute inset-0 flex items-center justify-center bg-brand-dark/60 text-sm font-semibold text-white">
+                  {fill(labels.seeAll, 0, total)}
+                </span>
+              )}
+            </button>
+          );
+        })}
+      </div>
       {total > 1 && (
-        <ul className="mt-2 grid grid-cols-3 gap-2 sm:grid-cols-4 lg:grid-cols-6">
-          {photos.slice(1).map((p, k) => {
-            const i = k + 1;
-            return (
-              <li key={i}>
-                <button
-                  type="button"
-                  onClick={(e) => open(i, e.currentTarget)}
-                  aria-label={openLabel(i)}
-                  className="block w-full overflow-hidden rounded-lg bg-[#e5e7eb] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue focus-visible:ring-offset-2"
-                >
-                  <Frame photo={p} label={labels.comingSoon} className="aspect-[4/3] w-full !text-xs" />
-                </button>
-              </li>
-            );
-          })}
-        </ul>
+        <button
+          type="button"
+          onClick={(e) => open(0, e.currentTarget)}
+          className="mt-2 inline-flex min-h-[44px] items-center rounded-lg border border-brand-silver-light px-4 text-sm font-semibold text-brand-dark hover:border-brand-blue focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue md:hidden"
+        >
+          {fill(labels.seeAll, 0, total)}
+        </button>
       )}
 
       {openIndex !== null && (

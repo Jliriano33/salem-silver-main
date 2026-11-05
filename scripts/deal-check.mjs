@@ -61,6 +61,11 @@ function checkDeal(slug, deal) {
     }
   });
 
+  (deal.documents || []).forEach((doc, i) => {
+    const f = path.join(PUBLIC_DIR, slug, 'docs', String(doc && doc.file));
+    if (!doc || !doc.file || !fs.existsSync(f)) problems.push(`missing document: documents[${i}].file = ${doc && doc.file} (public/deals/${slug}/docs/)`);
+  });
+
   (deal.photos || []).forEach((ph, i) => {
     const f = path.join(PUBLIC_DIR, slug, String(ph && ph.file));
     if (!ph || !ph.file || !fs.existsSync(f)) problems.push(`missing photo: photos[${i}].file = ${ph && ph.file} (public/deals/${slug}/)`);

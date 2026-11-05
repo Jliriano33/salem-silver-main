@@ -24,6 +24,12 @@ export type Money = number | Placeholder;
 /** A count or measure, or a placeholder. */
 export type Num = number | Placeholder;
 
+/** Localized text, or a placeholder until it is known. */
+export type Text = L10n | Placeholder;
+
+/** null hides the row on the page. Use it when a fact does not apply or Jefri prefers not to show it. */
+export type Opt<T> = T | null;
+
 export type DealPhoto = {
   /** File name inside public/deals/<slug>/, named 01.jpg, 02.jpg ... in display order. */
   file: string;
@@ -66,10 +72,44 @@ export type Deal = {
     yearBuilt: Num;
     /** e.g. "Single-family", "2-family". Localized. */
     propertyType: L10n | Placeholder;
+    halfBaths: Opt<Num>;
+    /** Number of units for 2-4 family buildings. */
+    units: Opt<Num>;
+    /** e.g. "Driveway, 2 spaces". */
+    parking: Opt<Text>;
+    /** e.g. "Full, unfinished". */
+    basement: Opt<Text>;
+    /** Public-record annual property tax, whole dollars. */
+    annualTaxes: Opt<Money>;
+    /** Public-record assessed value, whole dollars. */
+    assessedValue: Opt<Money>;
+  };
+
+  /**
+   * Property condition and systems, as an investor sees them (the InvestorLift
+   * set plus electrical, plumbing and water heater). Ages are text so they can say
+   * "8 years", "2015" or "Unknown". null hides a row.
+   */
+  condition: {
+    /** Overall condition, e.g. "Major repair", "Cosmetic", "Turnkey". */
+    overall: Text;
+    occupancy: Text;
+    roofAge: Opt<Text>;
+    heatingSystem: Opt<Text>;
+    heatingAge: Opt<Text>;
+    airConditioning: Opt<Text>;
+    foundationType: Opt<Text>;
+    foundationCondition: Opt<Text>;
+    electrical: Opt<Text>;
+    plumbing: Opt<Text>;
+    waterHeater: Opt<Text>;
   };
 
   numbers: {
+    /** Low end of the repair estimate, or the single figure. */
     estimatedRepairs: Money;
+    /** High end of a repair range. null shows estimatedRepairs alone. */
+    estimatedRepairsHigh: Opt<Money>;
     arv: Money;
     /**
      * Spread display stays off until Jefri approves a formula. The page never
@@ -82,6 +122,12 @@ export type Deal = {
   description: L10n | Placeholder;
 
   photos: DealPhoto[];
+
+  /**
+   * Optional files for investors in public/deals/<slug>/docs/ (inspection, permit
+   * history). Never the purchase contract or any document about the sale or its parties.
+   */
+  documents: { label: L10n; file: string }[];
 
   seo: {
     title: L10n;
