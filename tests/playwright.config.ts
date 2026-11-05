@@ -7,6 +7,8 @@ const root = path.resolve(__dirname, '..');
 
 export default defineConfig({
   testDir: '.',
+  // Deal-page specs have their own config and servers (deals.playwright.config.ts).
+  testIgnore: /deals-.*\.spec\.ts/,
   workers: 1,
   fullyParallel: false,
   reporter: 'list',
