@@ -47,6 +47,11 @@ const ui: DealUiStrings = {
       en: 'This property is offered as an assignment of contract: the buyer takes over the existing purchase contract. Buyers must provide proof of funds. All figures shown (price, repairs, ARV) are estimates, and investors must verify them on their own before buying.',
       es: 'Esta propiedad se ofrece como cesión de contrato: el comprador asume el contrato de compra existente. Los compradores deben presentar prueba de fondos. Todas las cifras mostradas (precio, reparaciones, ARV) son estimados, y los inversionistas deben verificarlas por su cuenta antes de comprar.',
     },
+    // COPY FOR JEFRI REVIEW: the one-line version shown under the price.
+    short: {
+      en: 'Assignment of contract. Proof of funds required. All figures are estimates to verify.',
+      es: 'Cesión de contrato. Se requiere prueba de fondos. Todas las cifras son estimados a verificar.',
+    },
   },
   form: {
     heading: { en: 'Request details on this property', es: 'Solicite información de esta propiedad' },

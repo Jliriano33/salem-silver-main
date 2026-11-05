@@ -121,7 +121,7 @@ export default function DealPage({ deal, locale, ui }: { deal: Deal; locale: Loc
               <Stat label={ui.price.assignmentFee[locale]} value={fmt(fee, locale, pending, 'money')} isPending={typeof fee !== 'number'} />
             )}
           </dl>
-          <p className="mt-4 text-sm leading-snug text-gray-700">{ui.notice.body[locale]}</p>
+          <p className="mt-4 text-sm leading-snug text-gray-700">{ui.notice.short[locale]}</p>
         </section>
 
         <section aria-labelledby="deal-details">

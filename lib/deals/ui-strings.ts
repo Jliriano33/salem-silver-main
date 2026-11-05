@@ -30,7 +30,7 @@ export type DealUiStrings = {
   /** Shown text for any field that is still a placeholder on a preview build. */
   pending: L10n; // "To be announced"
   /** REVIEW: assignment of contract, proof of funds, estimates to verify. */
-  notice: { heading: L10n; body: L10n };
+  notice: { heading: L10n; body: L10n; short: L10n }; // short: one line under the price
   form: {
     heading: L10n;
     intro: L10n;

@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import { test, expect, type APIRequestContext, type Page } from '@playwright/test';
-import { DEALS_SERVER_LOG } from './deals.playwright.config';
+import { DEALS_SERVER_LOG } from './deals-env';
 
 // Deal-page investor inquiry (goal NN, AC8 and AC9 locally). Fake data only; the
 // route's GHL target is the local mock on 127.0.0.1:3198.
