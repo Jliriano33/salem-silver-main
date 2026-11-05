@@ -73,7 +73,7 @@ export default function DealPage({ deal, locale, ui }: { deal: Deal; locale: Loc
   ];
 
   return (
-    <div className="min-h-screen bg-white text-brand-dark">
+    <div lang={locale} className="min-h-screen bg-white text-brand-dark">
       {locale === 'es' && <SetHtmlLang lang="es" />}
       <header className="border-b border-brand-silver-light/60 bg-white">
         <div className="mx-auto flex max-w-4xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
