@@ -217,13 +217,13 @@ export default function DealPage({ deal, locale, ui }: { deal: Deal; locale: Loc
               </p>
               <div className="mt-3 flex flex-col gap-4">
                 <div className="min-w-0">
-                  <h1 id="deal-address" className="break-words font-serif text-3xl font-bold leading-tight text-brand-navy sm:text-4xl">
+                  <h1 id="deal-address" className="break-words font-serif text-4xl font-bold leading-[1.1] text-brand-navy sm:text-5xl lg:text-6xl">
                     {street}
                   </h1>
-                  <p className="mt-1 text-lg text-gray-700">{cityLine}</p>
+                  <p className="mt-2 text-xl text-gray-700 sm:text-2xl">{cityLine}</p>
                   <p className="mt-3 flex flex-wrap items-baseline gap-x-3">
                     <span className="sr-only">{ui.price.asking[locale]}: </span>
-                    <span className={askingPending ? 'text-2xl font-semibold text-gray-500' : 'text-4xl font-bold tabular-nums text-brand-navy sm:text-5xl'}>
+                    <span className={askingPending ? 'text-2xl font-semibold text-gray-500' : 'text-4xl font-bold tabular-nums text-brand-blue sm:text-5xl'}>
                       {askingStr}
                     </span>
                     {perSqft && <span className="text-sm text-gray-600">{perSqft}</span>}
