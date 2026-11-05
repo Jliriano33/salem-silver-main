@@ -16,8 +16,11 @@ export function dealMetadata(slug: string, locale: Locale): Metadata {
   const first = deal.photos[0];
   const image =
     first && photoExists(deal.slug, first.file) ? `/deals/${deal.slug}/${first.file}` : '/deals/_placeholder-og.png';
-  const title = deal.seo.title[locale];
-  const description = deal.seo.description[locale];
+  // A placeholder never reaches a title or description (audit B-01): fall back to
+  // the brand name, which deal:check would refuse in production anyway.
+  const clean = (s: string) => (s.includes('PLACEHOLDER_') ? 'Salem Silver Capital' : s);
+  const title = clean(deal.seo.title[locale]);
+  const description = clean(deal.seo.description[locale]);
   const url = locale === 'es' ? `/es/deals/${deal.slug}` : `/deals/${deal.slug}`;
   return {
     title: { absolute: title },

@@ -39,6 +39,7 @@ export type InquiryErrorCode =
   | 'consent'
   | 'message_too_long'
   | 'unknown_deal'
+  | 'stale_page'
   | 'delivery_failed'
   | 'bad_request';
 

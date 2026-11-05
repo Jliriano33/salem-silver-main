@@ -111,6 +111,10 @@ const ui: DealUiStrings = {
         en: 'Your message is too long. Keep it under 2,000 characters.',
         es: 'Su mensaje es demasiado largo. Use menos de 2,000 caracteres.',
       },
+      stale_page: {
+        en: 'This page was updated since you opened it. Please reload the page and send the form again.',
+        es: 'Esta página se actualizó después de que la abrió. Vuelva a cargar la página y envíe el formulario otra vez.',
+      },
       unknown_deal: {
         en: 'This property is no longer available through this page. Please reload and try again.',
         es: 'Esta propiedad ya no está disponible en esta página. Recargue e intente de nuevo.',

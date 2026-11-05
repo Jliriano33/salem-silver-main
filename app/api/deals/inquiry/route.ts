@@ -34,6 +34,10 @@ export async function POST(request: NextRequest) {
   const errors = validateInquiry(body);
   if (errors.length > 0) return reply({ ok: false, errors }, 400);
 
+  // The consent text must be the one this server shows. A page opened before a
+  // wording change must reload, so the record never names text the buyer did not see (audit B-02).
+  if (body.consentVersion !== ui.form.consentVersion) return reply({ ok: false, errors: ['stale_page'] }, 409);
+
   const cfg = ghlConfigFromEnv();
   if (!cfg) {
     console.error('[deals] GHL_DEALS_TOKEN or GHL_DEALS_LOCATION_ID is not set');
@@ -52,7 +56,7 @@ export async function POST(request: NextRequest) {
     message: typeof body.message === 'string' ? body.message : '',
     language: body.language === 'es' ? 'es' : 'en',
     consent: true,
-    // The version of the text this server shows, never what the browser claims (audit A-02).
+    // Equal to what the browser sent, checked above.
     consentVersion: ui.form.consentVersion,
     company: '',
   } as const;

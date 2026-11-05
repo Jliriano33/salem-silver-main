@@ -51,7 +51,7 @@ export default function DealPage({ deal, locale, ui }: { deal: Deal; locale: Loc
 
   const photos: GalleryPhoto[] = deal.photos.map((p) => ({
     src: photoExists(deal.slug, p.file) ? `/deals/${deal.slug}/${p.file}` : null,
-    alt: p.alt[locale],
+    alt: text(p.alt, locale, pending),
   }));
 
   const { address: a, price, details: d, numbers: n } = deal;
@@ -107,10 +107,10 @@ export default function DealPage({ deal, locale, ui }: { deal: Deal; locale: Loc
 
         <section aria-labelledby="deal-address">
           <h1 id="deal-address" className="break-words font-serif text-3xl font-bold leading-tight text-brand-dark sm:text-4xl">
-            {a.street}
+            {text(a.street, locale, pending)}
           </h1>
           <p className="mt-1 text-lg text-gray-700">
-            {a.city}, {a.state} {a.zip}
+            {text(a.city, locale, pending)}, {text(a.state, locale, pending)} {text(a.zip, locale, pending)}
           </p>
         </section>
 

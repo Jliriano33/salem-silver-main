@@ -55,15 +55,13 @@ test.describe('API', () => {
     expect(c[2].body.body).toContain('Message: Can I see it Friday?');
   });
 
-  test('records the server consent version, not the one the browser sends', async ({ request }) => {
-    for (const consentVersion of [undefined, 'made-up-v9']) {
-      await request.post(`${MOCK}/_reset`);
+  test('a missing or different consent version is refused as a stale page, nothing sent', async ({ request }) => {
+    for (const consentVersion of [undefined, 'made-up-v9', 'investor-2026-01-01-old']) {
       const res = await request.post('/api/deals/inquiry', { data: { ...good, consentVersion } });
-      expect(res.status()).toBe(200);
-      const note = (await calls(request))[2].body.body as string;
-      expect(note).toContain('Consent: yes (investor-2026-11-05-draft)');
-      expect(note).not.toContain('made-up-v9');
+      expect(res.status()).toBe(409);
+      expect(await res.json()).toEqual({ ok: false, errors: ['stale_page'] });
     }
+    expect(await calls(request)).toHaveLength(0);
   });
 
   test('Spanish locale gets the Spanish language tag', async ({ request }) => {
@@ -127,7 +125,7 @@ test.describe('API', () => {
     await request.post('/api/deals/inquiry', { data: good });
     await new Promise((r) => setTimeout(r, 300));
     const log = fs.readFileSync(DEALS_SERVER_LOG, 'utf8');
-    for (const secret of ['test-token-nn-9d2e', 'test-nn-woodland@example.com', '5550142', 'Friday']) {
+    for (const secret of ['test-token-nn-9d2e', 'test-nn-woodland@example.com', '5550142', '555-0142', 'Friday']) {
       expect(log, secret).not.toContain(secret);
     }
   });
