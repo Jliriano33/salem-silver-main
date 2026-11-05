@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "node scripts/deal-check.mjs --build && next build",
     "start": "next start",
     "lint": "next lint",
     "pages:build": "npx @cloudflare/next-on-pages",
@@ -12,7 +12,8 @@
     "pages:deploy": "npx wrangler pages deploy .vercel/output/static",
     "get-ghl-webhook": "npx tsx scripts/get-ghl-webhook.ts",
     "set-cf-env": "npx tsx scripts/set-cloudflare-env.ts",
-    "set-cf-env-pw": "npx tsx scripts/set-cloudflare-env-playwright.ts"
+    "set-cf-env-pw": "npx tsx scripts/set-cloudflare-env-playwright.ts",
+    "deal:check": "node scripts/deal-check.mjs"
   },
   "dependencies": {
     "@cloudflare/next-on-pages": "^1.13.16",
