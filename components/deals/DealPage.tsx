@@ -7,12 +7,13 @@ import InvestorForm from '@/components/deals/InvestorForm';
 import Gallery, { type GalleryPhoto } from '@/components/deals/Gallery';
 import SetHtmlLang from '@/components/deals/SetHtmlLang';
 
-const isPlaceholder = (v: unknown): boolean => typeof v === 'string' && v.startsWith('PLACEHOLDER_');
+// Anywhere in the string, not only at the start (audit A-01): a half-filled sentence counts as unfilled.
+const isPlaceholder = (v: unknown): boolean => typeof v === 'string' && v.includes('PLACEHOLDER_');
 
 function fmt(v: number | string, locale: Locale, pending: string, kind: 'money' | 'num' | 'year'): string {
   if (typeof v !== 'number') return pending;
   if (kind === 'year') return String(v);
-  const s = new Intl.NumberFormat(locale === 'es' ? 'es-US' : 'en-US', { maximumFractionDigits: 0 }).format(v);
+  const s = new Intl.NumberFormat(locale === 'es' ? 'es-US' : 'en-US', { maximumFractionDigits: kind === 'money' ? 0 : 2 }).format(v);
   return kind === 'money' ? `$${s}` : s;
 }
 

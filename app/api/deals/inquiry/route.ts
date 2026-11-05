@@ -7,6 +7,7 @@ import {
   type InquiryResponse,
 } from '@/lib/deals/inquiry';
 import { getDeal } from '@/lib/deals/registry';
+import ui from '@/content/deals/_ui';
 
 export const runtime = 'edge';
 
@@ -51,7 +52,8 @@ export async function POST(request: NextRequest) {
     message: typeof body.message === 'string' ? body.message : '',
     language: body.language === 'es' ? 'es' : 'en',
     consent: true,
-    consentVersion: String(body.consentVersion ?? '').slice(0, 64),
+    // The version of the text this server shows, never what the browser claims (audit A-02).
+    consentVersion: ui.form.consentVersion,
     company: '',
   } as const;
 

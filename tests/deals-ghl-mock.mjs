@@ -27,6 +27,7 @@ http.createServer((req, res) => {
     calls.push({ method: req.method, url: req.url, step, auth: req.headers.authorization ?? null,
       version: req.headers.version ?? null, body });
     if (!step) return send(res, 404, { msg: 'not found' });
+    if (req.method !== 'POST') return send(res, 405, { msg: 'method not allowed' });
     if (fail === step) return send(res, 500, { msg: 'mock failure' });
     if (step === 'upsert') return send(res, 200, { new: true, contact: { id: 'mock-contact-1' } });
     return send(res, 201, { ok: true });

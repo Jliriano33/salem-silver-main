@@ -53,7 +53,7 @@ function checkDeal(slug, deal) {
   if (!Array.isArray(deal.photos) || deal.photos.length === 0) problems.push('photos is empty');
 
   walk(deal, '', (v, p) => {
-    if (typeof v === 'string' && v.startsWith('PLACEHOLDER_')) problems.push(`placeholder: ${p} = ${v}`);
+    if (typeof v === 'string' && v.includes('PLACEHOLDER_')) problems.push(`placeholder: ${p} = ${v}`);
     if (v && typeof v === 'object' && !Array.isArray(v) && 'en' in v && 'es' in v) {
       for (const lang of ['en', 'es']) {
         if (typeof v[lang] !== 'string' || v[lang].trim() === '') problems.push(`empty text: ${p}.${lang}`);

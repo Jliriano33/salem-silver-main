@@ -22,7 +22,7 @@ const good = {
   company: '',
 };
 
-type Call = { url: string; step: string | null; auth: string | null; version: string | null; body: any };
+type Call = { method: string; url: string; step: string | null; auth: string | null; version: string | null; body: any };
 const calls = async (r: APIRequestContext): Promise<Call[]> => (await r.get(`${MOCK}/_calls`)).json();
 
 test.beforeEach(async ({ request }) => {
@@ -36,6 +36,7 @@ test.describe('API', () => {
     expect(await res.json()).toEqual({ ok: true });
     const c = await calls(request);
     expect(c.map((x) => x.step)).toEqual(['upsert', 'tags', 'notes']);
+    expect(c.map((x) => x.method)).toEqual(['POST', 'POST', 'POST']);
     expect(c.every((x) => x.auth === 'Bearer test-token-nn-9d2e' && x.version === '2021-07-28')).toBe(true);
     expect(c[0].body).toEqual({
       locationId: 'test-location-nn',
@@ -52,6 +53,17 @@ test.describe('API', () => {
     expect(c[2].body.body).toContain('Proof of funds ready: Yes');
     expect(c[2].body.body).toContain('Consent: yes (investor-2026-11-05-draft)');
     expect(c[2].body.body).toContain('Message: Can I see it Friday?');
+  });
+
+  test('records the server consent version, not the one the browser sends', async ({ request }) => {
+    for (const consentVersion of [undefined, 'made-up-v9']) {
+      await request.post(`${MOCK}/_reset`);
+      const res = await request.post('/api/deals/inquiry', { data: { ...good, consentVersion } });
+      expect(res.status()).toBe(200);
+      const note = (await calls(request))[2].body.body as string;
+      expect(note).toContain('Consent: yes (investor-2026-11-05-draft)');
+      expect(note).not.toContain('made-up-v9');
+    }
   });
 
   test('Spanish locale gets the Spanish language tag', async ({ request }) => {
