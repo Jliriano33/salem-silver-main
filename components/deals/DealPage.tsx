@@ -152,7 +152,7 @@ export default function DealPage({ deal, locale, ui }: { deal: Deal; locale: Loc
           <p className="mt-3 whitespace-pre-line break-words leading-relaxed text-gray-800">{text(deal.description, locale, pending)}</p>
         </section>
 
-        <section aria-labelledby="deal-notice" className="rounded-xl border-l-4 border-brand-gold bg-amber-50 p-5">
+        <section aria-labelledby="deal-notice" className="rounded-xl border border-brand-gold/50 bg-amber-50 p-5">
           <h2 id="deal-notice" className="text-lg font-bold text-brand-dark">{ui.notice.heading[locale]}</h2>
           <p className="mt-2 whitespace-pre-line leading-relaxed text-gray-800">{ui.notice.body[locale]}</p>
         </section>
