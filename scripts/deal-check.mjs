@@ -49,6 +49,10 @@ function walk(value, p, fn) {
 
 function checkDeal(slug, deal) {
   const problems = [];
+  // Infinity and NaN are not figures (audit C-04).
+  walk(deal, '', (v, p) => {
+    if (typeof v === 'number' && !Number.isFinite(v)) problems.push(`not a real number: ${p} = ${v}`);
+  });
   if (deal.slug !== slug) problems.push(`slug mismatch: file is ${slug}.ts but slug is "${deal.slug}"`);
   if (!Array.isArray(deal.photos) || deal.photos.length === 0) problems.push('photos is empty');
 
@@ -64,6 +68,8 @@ function checkDeal(slug, deal) {
   (deal.documents || []).forEach((doc, i) => {
     const f = path.join(PUBLIC_DIR, slug, 'docs', String(doc && doc.file));
     if (!doc || !doc.file || !fs.existsSync(f)) problems.push(`missing document: documents[${i}].file = ${doc && doc.file} (public/deals/${slug}/docs/)`);
+    // Files in public/ can be downloaded by anyone with the URL, published or not (audit C-02).
+    if (!doc || doc.reviewed !== true) problems.push(`document not reviewed: documents[${i}] needs reviewed: true after a person checked it for names, signatures, contacts and file metadata`);
   });
 
   (deal.photos || []).forEach((ph, i) => {

@@ -4,11 +4,12 @@ import type { Deal } from '../../lib/deals/types';
 // Every PLACEHOLDER_ value arrives with the photos. Do not guess any of them.
 // Alt text stays neutral until the photos are reviewed.
 const deal: Deal = {
-  slug: '65-woodland-st',
+  // The live address is salemsilver.com/deals/65-Woodland-St-Lawrence-MA (Jefri, 2026-11-05).
+  slug: '65-Woodland-St-Lawrence-MA',
   published: false,
   indexable: false,
   address: { street: '65 Woodland St', city: 'Lawrence', state: 'MA', zip: '01841' },
-  price: { asking: 'PLACEHOLDER_PRICE', assignmentFee: 'PLACEHOLDER_ASSIGNMENT_PRICE' },
+  price: { asking: 499000, assignmentFee: 'PLACEHOLDER_ASSIGNMENT_PRICE' },
   details: {
     beds: 'PLACEHOLDER_BEDS',
     baths: 'PLACEHOLDER_BATHS',
@@ -53,7 +54,7 @@ const deal: Deal = {
     { file: '09.jpg', alt: { en: 'Photo 9 of 65 Woodland St', es: 'Foto 9 de 65 Woodland St' } },
     { file: '10.jpg', alt: { en: 'Photo 10 of 65 Woodland St', es: 'Foto 10 de 65 Woodland St' } },
   ],
-  // Optional files in public/deals/65-woodland-st/docs/. Never the purchase contract or any document about the sale or its parties.
+  // Optional files in public/deals/65-Woodland-St-Lawrence-MA/docs/. Never the purchase contract or any document about the sale or its parties.
   documents: [],
   seo: {
     title: {

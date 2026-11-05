@@ -5,7 +5,7 @@ import { DEALS_SERVER_LOG } from './deals-env';
 // Deal-page investor inquiry (goal NN, AC8 and AC9 locally). Fake data only; the
 // route's GHL target is the local mock on 127.0.0.1:3198.
 const MOCK = 'http://127.0.0.1:3198';
-const SLUG = '65-woodland-st';
+const SLUG = '65-Woodland-St-Lawrence-MA';
 
 const good = {
   slug: SLUG,
@@ -179,5 +179,17 @@ test.describe('form UI', () => {
     expect(c.map((x) => x.step)).toEqual(['upsert', 'tags', 'notes']);
     expect(c[1].body.tags).toContain('investor-spanish');
     expect(c[2].body.body).toContain('Buyer type: Hard money');
+  });
+});
+
+test.describe('deal URL', () => {
+  test('the exact slug answers 200 and another case redirects to it', async ({ request }) => {
+    expect((await request.get(`/deals/${SLUG}`)).status()).toBe(200);
+    for (const asked of ['/deals/65-woodland-st-lawrence-ma', '/es/deals/65-WOODLAND-ST-LAWRENCE-MA']) {
+      const res = await request.get(asked, { maxRedirects: 0 });
+      expect(res.status(), asked).toBe(308);
+      expect(res.headers()['location']).toContain(asked.startsWith('/es') ? `/es/deals/${SLUG}` : `/deals/${SLUG}`);
+    }
+    expect((await request.get('/deals/no-such-deal', { maxRedirects: 0 })).status()).toBe(404);
   });
 });

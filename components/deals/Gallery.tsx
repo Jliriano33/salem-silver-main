@@ -62,6 +62,7 @@ export default function Gallery({ photos, labels }: { photos: GalleryPhoto[]; la
   const isOpen = openIndex !== null;
   const triggerRef = useRef<HTMLElement | null>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
+  const heroRef = useRef<HTMLButtonElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
   const touchX = useRef<number | null>(null);
 
@@ -73,7 +74,12 @@ export default function Gallery({ photos, labels }: { photos: GalleryPhoto[]; la
   const close = useCallback(() => {
     setOpenIndex(null);
     const el = triggerRef.current;
-    if (el) setTimeout(() => el.focus(), 0);
+    // The trigger may be hidden by a resize while the dialog was open (audit C-05):
+    // fall back to the hero, which shows at every width.
+    setTimeout(() => {
+      if (el && el.getClientRects().length > 0) el.focus();
+      else heroRef.current?.focus();
+    }, 0);
   }, []);
 
   const go = useCallback(
@@ -136,6 +142,7 @@ export default function Gallery({ photos, labels }: { photos: GalleryPhoto[]; la
     <div>
       <div className="grid gap-2 overflow-hidden rounded-xl md:h-[440px] md:grid-cols-4 md:grid-rows-2">
         <button
+          ref={heroRef}
           type="button"
           onClick={(e) => open(0, e.currentTarget)}
           aria-label={openLabel(0)}

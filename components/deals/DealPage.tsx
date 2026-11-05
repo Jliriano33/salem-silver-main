@@ -16,8 +16,11 @@ const isPlaceholder = (v: unknown): boolean => typeof v === 'string' && v.includ
 
 type Fmt = 'money' | 'num' | 'year';
 
+// A real figure: Infinity or NaN never reaches the page (audit C-04).
+const isNum = (v: unknown): v is number => typeof v === 'number' && Number.isFinite(v);
+
 function fmt(v: number | string, locale: Locale, pending: string, kind: Fmt): string {
-  if (typeof v !== 'number') return pending;
+  if (!isNum(v)) return pending;
   if (kind === 'year') return String(v);
   const s = new Intl.NumberFormat(locale === 'es' ? 'es-US' : 'en-US', { maximumFractionDigits: kind === 'money' ? 0 : 2 }).format(v);
   return kind === 'money' ? `$${s}` : s;
@@ -41,7 +44,7 @@ function rowsOf(
   return items.flatMap(([label, v, kind]) => {
     if (v === null) return [];
     if (kind === 'text') return [{ label, value: text(v as Text, locale, pending), isPending: pendingText(v as Text, locale) }];
-    return [{ label, value: fmt(v as number | string, locale, pending, kind), isPending: typeof v !== 'number' }];
+    return [{ label, value: fmt(v as number | string, locale, pending, kind), isPending: !isNum(v) }];
   });
 }
 
@@ -85,19 +88,21 @@ export default function DealPage({ deal, locale, ui }: { deal: Deal; locale: Loc
   const street = text(a.street, locale, pending);
   const cityLine = `${text(a.city, locale, pending)}, ${text(a.state, locale, pending)} ${text(a.zip, locale, pending)}`;
   const askingStr = fmt(price.asking, locale, pending, 'money');
-  const askingPending = typeof price.asking !== 'number';
+  const askingPending = !isNum(price.asking);
   const perSqft =
-    typeof price.asking === 'number' && typeof d.sqft === 'number' && d.sqft > 0
+    isNum(price.asking) && isNum(d.sqft) && d.sqft > 0
       ? `${fmt(Math.round(price.asking / d.sqft), locale, pending, 'money')} ${t(L.perSqft)}`
       : null;
   const typeStr = pendingText(d.propertyType, locale) ? null : text(d.propertyType, locale, pending);
 
-  const repairs =
-    typeof n.estimatedRepairs === 'number' && typeof n.estimatedRepairsHigh === 'number'
+  // A range with either end unknown is pending as a whole, never shown as one figure (audit C-03).
+  const repairsPending =
+    !isNum(n.estimatedRepairs) || (n.estimatedRepairsHigh !== null && !isNum(n.estimatedRepairsHigh));
+  const repairs = repairsPending
+    ? pending
+    : n.estimatedRepairsHigh !== null
       ? `${fmt(n.estimatedRepairs, locale, pending, 'money')} – ${fmt(n.estimatedRepairsHigh, locale, pending, 'money')}`
       : fmt(n.estimatedRepairs, locale, pending, 'money');
-  const repairsPending =
-    typeof n.estimatedRepairs !== 'number' || (n.estimatedRepairsHigh !== null && typeof n.estimatedRepairsHigh !== 'number');
 
   const counts = rowsOf(locale, pending, [
     [ui.details.beds[locale], d.beds, 'num'],
@@ -252,10 +257,10 @@ export default function DealPage({ deal, locale, ui }: { deal: Deal; locale: Loc
               <dl className="mt-4 grid grid-cols-1 gap-px overflow-hidden rounded-xl border border-brand-silver-light bg-brand-silver-light sm:grid-cols-2">
                 {[
                   { label: ui.price.asking[locale], value: askingStr, p: askingPending },
-                  { label: ui.numbers.arv[locale], value: fmt(n.arv, locale, pending, 'money'), p: typeof n.arv !== 'number' },
+                  { label: ui.numbers.arv[locale], value: fmt(n.arv, locale, pending, 'money'), p: !isNum(n.arv) },
                   { label: ui.numbers.estimatedRepairs[locale], value: repairs, p: repairsPending },
                   ...(price.assignmentFee !== null
-                    ? [{ label: ui.price.assignmentFee[locale], value: fmt(price.assignmentFee, locale, pending, 'money'), p: typeof price.assignmentFee !== 'number' }]
+                    ? [{ label: ui.price.assignmentFee[locale], value: fmt(price.assignmentFee, locale, pending, 'money'), p: !isNum(price.assignmentFee) }]
                     : []),
                 ].map((r) => (
                   <div key={r.label} className="min-w-0 bg-white p-5">
@@ -295,7 +300,7 @@ export default function DealPage({ deal, locale, ui }: { deal: Deal; locale: Loc
                   {docs.map((doc) => (
                     <li key={doc.file}>
                       <a href={`/deals/${deal.slug}/docs/${doc.file}`} className="font-medium text-brand-blue underline hover:text-brand-blue-dark">
-                        {t(doc.label)}
+                        {text(doc.label, locale, pending)}
                       </a>
                     </li>
                   ))}

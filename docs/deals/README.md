@@ -5,7 +5,7 @@ content file plus one photo folder. No code changes are needed.
 
 ## Steps
 
-1. Copy `content/deals/65-woodland-st.ts` to `content/deals/<new-slug>.ts`. The file name must equal the slug (lowercase, hyphens, for example `12-main-st`).
+1. Copy `content/deals/65-Woodland-St-Lawrence-MA.ts` to `content/deals/<new-slug>.ts`. The file name must equal the slug, which is the live URL segment exactly, case included (letters, digits and hyphens, for example `12-Main-St-Lowell-MA` for salemsilver.com/deals/12-Main-St-Lowell-MA). Links typed in another case redirect to it. The photo folder uses the same spelling.
 2. Set `slug` to the new slug. Set `ghl.dealTag` (for example `assignment-12-main-st`) and `ghl.source` (for example `Deal page 12 Main St`).
 3. Fill every field. An unknown value stays as its `PLACEHOLDER_*` string until it arrives:
    - `address`: street, city, state, zip
@@ -13,7 +13,7 @@ content file plus one photo folder. No code changes are needed.
    - `details`: beds, baths, sqft, lotSize (EN and ES), yearBuilt, propertyType (EN and ES), halfBaths, units, parking, basement, annualTaxes, assessedValue (any of the last six can be `null` to hide the row)
    - `condition`: overall condition and occupancy (required), then roofAge, heatingSystem, heatingAge, airConditioning, foundationType, foundationCondition, electrical, plumbing, waterHeater (each EN and ES text such as "8 years" or "Unknown", or `null` to hide)
    - `numbers`: estimatedRepairs, estimatedRepairsHigh (the top of a range, or `null` for one figure), arv (leave `showSpread: false`)
-   - `documents`: optional files in `public/deals/<slug>/docs/` with an EN and ES label (an inspection or permit history; never the purchase contract or anything about the sale)
+   - `documents`: optional files in `public/deals/<slug>/docs/` with an EN and ES label (an inspection or permit history; never the purchase contract or anything about the sale). Anything in `public/` can be downloaded by anyone with its address, even before the deal is published. Before adding a file, a person opens it and checks every page for an owner or seller name, signature, phone, email or account number, redacts what it finds, strips the PDF metadata (author, title), and only then sets `reviewed: true` on that entry. `deal:check` refuses a document without it.
    - `description` (EN and ES)
    - `photos`: one entry per file, with neutral alt text in EN and ES
    - `seo.title` and `seo.description` (EN and ES)
@@ -40,7 +40,7 @@ The page does not show a spread or profit. It stays off (`showSpread: false`) un
 
 ## Tomorrow: publish 65 Woodland St
 
-The file `content/deals/65-woodland-st.ts` is already in place as a draft (`published: false`, `indexable: false`) with 10 photo slots listed. Jefri sends these values:
+The file `content/deals/65-Woodland-St-Lawrence-MA.ts` is already in place as a draft (`published: false`, `indexable: false`) with 10 photo slots listed. Jefri sends these values:
 
 - [ ] Asking price (the assignment price buyers pay)
 - [ ] Assignment fee, only if it should be shown (otherwise it is hidden)
@@ -63,4 +63,4 @@ The file `content/deals/65-woodland-st.ts` is already in place as a draft (`publ
 
 Remember the privacy rule above: send nothing about the seller or the sale.
 
-Then Claude fills the file, puts the photos in `public/deals/65-woodland-st/`, runs `npm run deal:check 65-woodland-st` until `READY`, sets `published: true`, and the page goes live when the change is pushed to `main`.
+Then Claude fills the file, puts the photos in `public/deals/65-Woodland-St-Lawrence-MA/`, runs `npm run deal:check 65-Woodland-St-Lawrence-MA` until `READY`, sets `published: true`, and the page goes live when the change is pushed to `main`.

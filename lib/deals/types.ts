@@ -127,7 +127,16 @@ export type Deal = {
    * Optional files for investors in public/deals/<slug>/docs/ (inspection, permit
    * history). Never the purchase contract or any document about the sale or its parties.
    */
-  documents: { label: L10n; file: string }[];
+  documents: {
+    label: L10n;
+    file: string;
+    /**
+     * Set to true only after a person opened the file and confirmed it has no owner
+     * or seller name, signature, phone, email or account number, and that its
+     * metadata (PDF author and title) was stripped. deal:check refuses anything else.
+     */
+    reviewed: true;
+  }[];
 
   seo: {
     title: L10n;

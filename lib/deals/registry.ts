@@ -11,7 +11,7 @@ declare const require: {
   };
 };
 
-const ctx = require.context('../../content/deals', false, /^\.\/(?!_)[a-z0-9-]+\.ts$/);
+const ctx = require.context('../../content/deals', false, /^\.\/(?!_)[A-Za-z0-9-]+\.ts$/);
 
 /**
  * Cloudflare Pages sets CF_PAGES_BRANCH at build time; main is production.
