@@ -48,15 +48,15 @@ function rowsOf(
   });
 }
 
-const valueCls = (p: boolean) => (p ? 'font-medium text-gray-500' : 'font-semibold text-brand-dark');
+const valueCls = (p: boolean) => (p ? 'font-medium text-gray-500' : 'font-semibold text-brand-navy');
 
 /** Two-column label/value list, the "facts and features" style. */
 function FactList({ title, rows, twoCol }: { title?: string; rows: Row[]; twoCol?: boolean }) {
   if (rows.length === 0) return null;
   return (
     <div className="min-w-0">
-      {title && <h3 className="border-b border-brand-dark pb-2 text-xs font-bold uppercase tracking-[0.12em] text-brand-dark">{title}</h3>}
-      <dl className={twoCol ? 'grid border-t border-brand-dark md:grid-cols-2 md:gap-x-10 [&>div]:border-b [&>div]:border-brand-silver-light/60' : 'divide-y divide-brand-silver-light/60'}>
+      {title && <h3 className="border-b-2 border-brand-navy pb-2 text-xs font-bold uppercase tracking-[0.12em] text-brand-navy">{title}</h3>}
+      <dl className={twoCol ? 'grid border-t-2 border-brand-navy md:grid-cols-2 md:gap-x-10 [&>div]:border-b [&>div]:border-brand-silver-light/60' : 'divide-y divide-brand-silver-light/60'}>
         {rows.map((r) => (
           <div key={r.label} className="flex items-baseline justify-between gap-4 py-2.5 text-sm">
             <dt className="text-gray-600">{r.label}</dt>
@@ -68,7 +68,7 @@ function FactList({ title, rows, twoCol }: { title?: string; rows: Row[]; twoCol
   );
 }
 
-const h2 = 'text-xl font-bold text-brand-dark sm:text-2xl';
+const h2 = 'text-xl font-bold text-brand-navy sm:text-2xl';
 
 export default function DealPage({ deal, locale, ui }: { deal: Deal; locale: Locale; ui: DealUiStrings }) {
   const pending = ui.pending[locale];
@@ -151,10 +151,11 @@ export default function DealPage({ deal, locale, ui }: { deal: Deal; locale: Loc
     [ui.details.yearBuilt[locale], d.yearBuilt, 'year'],
   ]);
 
+  // Side card buttons sit on navy.
   const primaryBtn =
-    'inline-flex min-h-[48px] w-full items-center justify-center rounded-lg bg-brand-blue px-5 text-base font-semibold text-white hover:bg-brand-blue-dark focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue focus-visible:ring-offset-2';
+    'inline-flex min-h-[48px] w-full items-center justify-center rounded-lg bg-white px-5 text-base font-semibold text-brand-navy hover:bg-brand-silver-light focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-navy';
   const secondaryBtn =
-    'inline-flex min-h-[48px] w-full items-center justify-center rounded-lg border border-brand-dark px-5 text-base font-semibold text-brand-dark hover:bg-brand-dark hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue focus-visible:ring-offset-2';
+    'inline-flex min-h-[48px] w-full items-center justify-center rounded-lg border border-white/70 px-5 text-base font-semibold text-white hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-navy';
 
   return (
     <div lang={locale} className="min-h-screen bg-white text-brand-dark">
@@ -167,7 +168,7 @@ export default function DealPage({ deal, locale, ui }: { deal: Deal; locale: Loc
           <div className="flex items-center gap-2 sm:gap-4">
             <a
               href="tel:+16177142020"
-              className="hidden text-sm font-semibold text-brand-dark hover:text-brand-blue focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue sm:inline"
+              className="hidden text-sm font-semibold text-brand-navy hover:text-brand-blue focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue sm:inline"
             >
               (617) 714-2020
             </a>
@@ -190,7 +191,7 @@ export default function DealPage({ deal, locale, ui }: { deal: Deal; locale: Loc
             <li aria-hidden="true">›</li>
             <li>{text(a.city, locale, pending)}</li>
             <li aria-hidden="true">›</li>
-            <li aria-current="page" className="font-medium text-brand-dark">{street}</li>
+            <li aria-current="page" className="font-semibold text-brand-navy">{street}</li>
           </ol>
         </nav>
 
@@ -210,19 +211,19 @@ export default function DealPage({ deal, locale, ui }: { deal: Deal; locale: Loc
         <div className="mt-6 grid gap-10 lg:grid-cols-[minmax(0,1fr)_340px]">
           <div className="min-w-0 space-y-10">
             <section aria-labelledby="deal-address">
-              <p className="text-xs font-bold uppercase tracking-[0.12em] text-gray-600">
+              <p className="text-xs font-bold uppercase tracking-[0.12em] text-brand-navy">
                 {t(L.status)}
                 {typeStr && ` · ${typeStr}`}
               </p>
               <div className="mt-3 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
                 <div className="min-w-0">
-                  <h1 id="deal-address" className="break-words font-serif text-3xl font-bold leading-tight sm:text-4xl">
+                  <h1 id="deal-address" className="break-words font-serif text-3xl font-bold leading-tight text-brand-navy sm:text-4xl">
                     {street}
                   </h1>
                   <p className="mt-1 text-lg text-gray-700">{cityLine}</p>
                   <p className="mt-3 flex flex-wrap items-baseline gap-x-3">
                     <span className="sr-only">{ui.price.asking[locale]}: </span>
-                    <span className={askingPending ? 'text-2xl font-semibold text-gray-500' : 'text-4xl font-bold tabular-nums sm:text-5xl'}>
+                    <span className={askingPending ? 'text-2xl font-semibold text-gray-500' : 'text-4xl font-bold tabular-nums text-brand-navy sm:text-5xl'}>
                       {askingStr}
                     </span>
                     {perSqft && <span className="text-sm text-gray-600">{perSqft}</span>}
@@ -232,7 +233,7 @@ export default function DealPage({ deal, locale, ui }: { deal: Deal; locale: Loc
                   {counts.map((r) => (
                     <div key={r.label} className="flex min-w-0 flex-col-reverse">
                       <dt className="text-xs text-gray-600">{r.label}</dt>
-                      <dd className={`tabular-nums ${r.isPending ? 'text-base font-medium text-gray-500' : 'text-2xl font-bold'}`}>{r.value}</dd>
+                      <dd className={`tabular-nums ${r.isPending ? 'text-base font-medium text-gray-500' : 'text-2xl font-bold text-brand-navy'}`}>{r.value}</dd>
                     </div>
                   ))}
                 </dl>
@@ -254,7 +255,7 @@ export default function DealPage({ deal, locale, ui }: { deal: Deal; locale: Loc
 
             <section aria-labelledby="deal-numbers">
               <h2 id="deal-numbers" className={h2}>{ui.numbers.heading[locale]}</h2>
-              <dl className="mt-4 grid grid-cols-1 gap-px overflow-hidden rounded-xl border border-brand-silver-light bg-brand-silver-light sm:grid-cols-2">
+              <dl className="mt-4 grid grid-cols-1 gap-px overflow-hidden rounded-xl border border-brand-navy bg-white/20 sm:grid-cols-2">
                 {[
                   { label: ui.price.asking[locale], value: askingStr, p: askingPending },
                   { label: ui.numbers.arv[locale], value: fmt(n.arv, locale, pending, 'money'), p: !isNum(n.arv) },
@@ -263,9 +264,9 @@ export default function DealPage({ deal, locale, ui }: { deal: Deal; locale: Loc
                     ? [{ label: ui.price.assignmentFee[locale], value: fmt(price.assignmentFee, locale, pending, 'money'), p: !isNum(price.assignmentFee) }]
                     : []),
                 ].map((r) => (
-                  <div key={r.label} className="min-w-0 bg-white p-5">
-                    <dt className="text-xs font-semibold uppercase tracking-wide text-gray-600">{r.label}</dt>
-                    <dd className={`mt-1 break-words ${r.p ? 'text-base font-medium text-gray-500' : 'text-3xl font-bold tabular-nums'}`}>{r.value}</dd>
+                  <div key={r.label} className="min-w-0 bg-brand-navy p-5">
+                    <dt className="text-xs font-semibold uppercase tracking-wide text-brand-silver-light">{r.label}</dt>
+                    <dd className={`mt-1 break-words ${r.p ? 'text-base font-medium text-brand-silver-light' : 'text-3xl font-bold tabular-nums text-white'}`}>{r.value}</dd>
                   </div>
                 ))}
               </dl>
@@ -309,7 +310,7 @@ export default function DealPage({ deal, locale, ui }: { deal: Deal; locale: Loc
             )}
 
             <section aria-labelledby="deal-notice" className="rounded-xl border border-brand-gold/50 bg-amber-50 p-5">
-              <h2 id="deal-notice" className="text-lg font-bold">{ui.notice.heading[locale]}</h2>
+              <h2 id="deal-notice" className="text-lg font-bold text-brand-navy">{ui.notice.heading[locale]}</h2>
               <p className="mt-2 whitespace-pre-line leading-relaxed text-gray-800">{ui.notice.body[locale]}</p>
             </section>
 
@@ -322,22 +323,22 @@ export default function DealPage({ deal, locale, ui }: { deal: Deal; locale: Loc
           </div>
 
           <aside aria-label={t(L.requestDetails)} className="hidden lg:block">
-            <div className="space-y-4 rounded-xl border border-brand-silver-light bg-white p-5 shadow-sm lg:sticky lg:top-6">
+            <div className="space-y-4 rounded-xl bg-brand-navy p-5 text-white shadow-sm lg:sticky lg:top-6">
               <div>
-                <p className={askingPending ? 'text-xl font-semibold text-gray-500' : 'text-3xl font-bold tabular-nums'}>{askingStr}</p>
-                <p className="mt-1 text-sm text-gray-700">{street}, {cityLine}</p>
+                <p className={askingPending ? 'text-xl font-semibold text-brand-silver-light' : 'text-3xl font-bold tabular-nums'}>{askingStr}</p>
+                <p className="mt-1 text-sm text-brand-silver-light">{street}, {cityLine}</p>
               </div>
               <a href="#inquiry" className={primaryBtn}>{t(L.requestDetails)}</a>
               <a href="tel:+16177142020" className={secondaryBtn}>
                 {t(L.call)} (617) 714-2020
               </a>
-              <p className="text-sm text-gray-600">{t(L.pofLine)}</p>
+              <p className="text-sm text-brand-silver-light">{t(L.pofLine)}</p>
             </div>
           </aside>
         </div>
       </main>
 
-      <footer className="bg-brand-dark">
+      <footer className="bg-brand-navy">
         <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-10 sm:px-6 md:flex-row md:items-center md:justify-between">
           <div className="flex items-center gap-4">
             <Image src="/deals/_logo-footer.png" alt="Salem Silver Capital" width={400} height={250} className="h-14 w-auto brightness-0 invert" />

@@ -17,6 +17,8 @@ const config: Config = {
           silver: '#8C9EAD',
           'silver-light': '#B8C4CB',
           dark: '#0A0A0A',
+          // Deal pages (goal NN): titles and highlights.
+          navy: '#14213D',
           white: '#FFFFFF',
         },
       },
