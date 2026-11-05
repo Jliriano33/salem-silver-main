@@ -245,7 +245,7 @@ export default function InvestorForm({ slug, locale, ui }: Props) {
       </div>
 
       <button type="submit" disabled={status === 'sending'}
-        className="w-full rounded-lg bg-brand-navy px-6 py-3.5 text-base font-semibold text-white hover:bg-brand-blue-dark focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue focus-visible:ring-offset-2 disabled:opacity-60 sm:w-auto">
+        className="w-full rounded-lg bg-brand-blue px-6 py-3.5 text-base font-semibold text-white hover:bg-brand-blue-dark focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue focus-visible:ring-offset-2 disabled:opacity-60 sm:w-auto">
         {status === 'sending' ? t(f.sending) : t(f.submit)}
       </button>
     </form>

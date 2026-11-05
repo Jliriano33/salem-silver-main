@@ -151,9 +151,9 @@ export default function DealPage({ deal, locale, ui }: { deal: Deal; locale: Loc
     [ui.details.yearBuilt[locale], d.yearBuilt, 'year'],
   ]);
 
-  // Side card buttons sit on navy.
+  // Side card buttons sit on navy; the main one keeps the brand light blue (Jefri).
   const primaryBtn =
-    'inline-flex min-h-[48px] w-full items-center justify-center rounded-lg bg-white px-5 text-base font-semibold text-brand-navy hover:bg-brand-silver-light focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-navy';
+    'inline-flex min-h-[48px] w-full items-center justify-center rounded-lg bg-brand-blue px-5 text-base font-semibold text-white hover:bg-brand-blue-dark focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-navy';
   const secondaryBtn =
     'inline-flex min-h-[48px] w-full items-center justify-center rounded-lg border border-white/70 px-5 text-base font-semibold text-white hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-navy';
 
