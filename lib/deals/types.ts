@@ -3,8 +3,8 @@
 // the gallery, the form and scripts/deal-check.mjs all read this shape and nothing
 // else, so a new deal never needs a code change.
 //
-// This file must stay erasable TypeScript (types only, no enums, no runtime code):
-// scripts/deal-check.mjs imports content files with Node's built-in type stripping.
+// Keep this file and the content files plain TypeScript with no enums:
+// scripts/deal-check.mjs transpiles content files with the typescript package.
 
 export type Locale = 'en' | 'es';
 
