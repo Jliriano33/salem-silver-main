@@ -118,6 +118,10 @@ export default function Gallery({ photos, labels }: { photos: GalleryPhoto[]; la
 
   if (total === 0) return null;
 
+  // A placeholder frame shows text, so its button name must start with that text (WCAG 2.5.3).
+  const openLabel = (i: number) =>
+    photos[i].src ? fill(labels.open, i + 1, total) : `${labels.comingSoon}. ${fill(labels.open, i + 1, total)}`;
+
   const btn =
     'inline-flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/25 focus:outline-none focus-visible:ring-2 focus-visible:ring-white';
 
@@ -126,7 +130,7 @@ export default function Gallery({ photos, labels }: { photos: GalleryPhoto[]; la
       <button
         type="button"
         onClick={(e) => open(0, e.currentTarget)}
-        aria-label={fill(labels.open, 1, total)}
+        aria-label={openLabel(0)}
         className="block w-full overflow-hidden rounded-xl bg-[#e5e7eb] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue focus-visible:ring-offset-2"
       >
         <Frame photo={photos[0]} label={labels.comingSoon} eager className="aspect-[4/3] w-full sm:aspect-[16/10]" />
@@ -141,7 +145,7 @@ export default function Gallery({ photos, labels }: { photos: GalleryPhoto[]; la
                 <button
                   type="button"
                   onClick={(e) => open(i, e.currentTarget)}
-                  aria-label={fill(labels.open, i + 1, total)}
+                  aria-label={openLabel(i)}
                   className="block w-full overflow-hidden rounded-lg bg-[#e5e7eb] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue focus-visible:ring-offset-2"
                 >
                   <Frame photo={p} label={labels.comingSoon} className="aspect-[4/3] w-full !text-xs" />

@@ -78,7 +78,7 @@ export default function DealPage({ deal, locale, ui }: { deal: Deal; locale: Loc
       <header className="border-b border-brand-silver-light/60 bg-white">
         <div className="mx-auto flex max-w-4xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
           <Link href="/" className="flex-shrink-0 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue">
-            <Image src="/images/logo/logo-01.png" alt="Salem Silver Capital" width={340} height={80} className="h-14 w-auto sm:h-16" priority />
+            <Image src="/deals/_logo.png" alt="Salem Silver Capital" width={680} height={425} className="h-14 w-auto sm:h-16" priority />
           </Link>
           <Link
             href={otherHref}
@@ -168,7 +168,7 @@ export default function DealPage({ deal, locale, ui }: { deal: Deal; locale: Loc
       <footer className="bg-brand-dark">
         <div className="mx-auto flex max-w-4xl flex-col gap-4 px-4 py-10 sm:px-6 md:flex-row md:items-center md:justify-between">
           <div className="flex items-center gap-4">
-            <Image src="/images/logo/logo-02.png" alt="Salem Silver Capital" width={180} height={80} className="h-14 w-auto brightness-0 invert" />
+            <Image src="/deals/_logo-footer.png" alt="Salem Silver Capital" width={400} height={250} className="h-14 w-auto brightness-0 invert" />
             <p className="text-sm text-brand-silver-light">{ui.footer.tagline[locale]}</p>
           </div>
           <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
