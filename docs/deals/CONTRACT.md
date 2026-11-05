@@ -53,7 +53,7 @@ No `/deals` index (out of scope). Deal pages are not added to `app/sitemap.ts`.
 7. Description.
 8. Assignment notice (full) directly above the form.
 9. Investor contact form.
-10. Footer: Salem Silver Capital contact only: (617) 714-2020, privacy policy link. Nothing from Liriano Realty.
+10. Footer: Salem Silver Capital contact only: (617) 714-2020, privacy policy link. No other brand.
 
 ## Investor form and GoHighLevel
 
