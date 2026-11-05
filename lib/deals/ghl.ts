@@ -13,6 +13,9 @@ const DEFAULT_BASE = 'https://services.leadconnectorhq.com';
 const VERSION = '2021-07-28';
 
 export const INVESTOR_TAG = 'salem-silver-investor';
+// Marks every lead that came from a deal page and nothing else (Jefri, 2026-11-05),
+// so a Smart List can hold exactly these leads in the shared location.
+export const DEAL_PAGE_TAG = 'salem-silver-deal-page';
 export const LANGUAGE_TAGS = { en: 'investor-english', es: 'investor-spanish' } as const;
 
 export type GhlConfig = { token: string; locationId: string; baseUrl: string };
@@ -73,7 +76,7 @@ export async function deliverInquiry(
   if (!id) throw new GhlError('upsert', 502);
 
   const tags = await post(`/contacts/${encodeURIComponent(id)}/tags`, {
-    tags: [INVESTOR_TAG, deal.ghl.dealTag, LANGUAGE_TAGS[p.language]],
+    tags: [DEAL_PAGE_TAG, INVESTOR_TAG, deal.ghl.dealTag, LANGUAGE_TAGS[p.language]],
   });
   if (!tags.ok) throw new GhlError('tags', tags.status);
 

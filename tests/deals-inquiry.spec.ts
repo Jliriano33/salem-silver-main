@@ -48,7 +48,7 @@ test.describe('API', () => {
     });
     expect(c[0].body).not.toHaveProperty('tags');
     expect(c[1].url).toBe('/contacts/mock-contact-1/tags');
-    expect(c[1].body).toEqual({ tags: ['salem-silver-investor', 'assignment-65-woodland-st', 'investor-english'] });
+    expect(c[1].body).toEqual({ tags: ['salem-silver-deal-page', 'salem-silver-investor', 'assignment-65-woodland-st', 'investor-english'] });
     expect(c[2].body.body).toContain('Buyer type: Cash');
     expect(c[2].body.body).toContain('Proof of funds ready: Yes');
     expect(c[2].body.body).toContain('Consent: yes (investor-2026-11-05-draft)');

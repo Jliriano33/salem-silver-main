@@ -63,7 +63,7 @@ No `/deals` index (out of scope). Deal pages are not added to `app/sitemap.ts`.
 - Validation: `validateInquiry` in `lib/deals/inquiry.ts` runs in the browser and again in the route.
   Errors come back as codes; the form shows the EN or ES text from `_ui.ts` and keeps what was typed.
 - Delivery (route): GHL v2 `POST /contacts/upsert` WITHOUT tags (upsert replaces tags, SS-1 F-056),
-  then `POST /contacts/{id}/tags` with `salem-silver-investor`, the deal tag and the language tag
+  then `POST /contacts/{id}/tags` with `salem-silver-deal-page` (marks deal-page leads only), `salem-silver-investor`, the deal tag and the language tag
   (`investor-english` or `investor-spanish`), then `POST /contacts/{id}/notes` with buyer type,
   proof of funds, message, deal and consent version. Contact `source` = the deal's `ghl.source`.
 - Env (server only, never in code): `GHL_DEALS_TOKEN`, `GHL_DEALS_LOCATION_ID`; tests may set
