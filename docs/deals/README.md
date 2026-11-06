@@ -18,6 +18,7 @@ content file plus one photo folder. No code changes are needed.
    - `photos`: one entry per file, with neutral alt text in EN and ES
    - `seo.title` and `seo.description` (EN and ES)
 4. Drop the photos in `public/deals/<slug>/` named `01.jpg`, `02.jpg`, and so on, in display order. The first photo is the hero and the share image.
+   Photo prep (Claude does this): convert phone photos (HEIC) to JPEG, at most 1600px on the long side, and strip all metadata (an iPhone photo carries its GPS location). Check each photo for people, mail, papers or anything that names someone. Then save an 800px copy next to each, named `01-800.jpg`, `02-800.jpg` and so on. Phones load the small copy, so the page stays fast. `deal:check` warns when a copy is missing.
 5. Run `npm run deal:check <slug>` until it prints `READY: <slug>`. It lists every placeholder by field path and every photo file that is missing.
 6. Set `published: true`. Decide `indexable`: `false` keeps the page out of search engines (the default), `true` allows indexing.
 7. Deploy. A push to `main` is production on Cloudflare Pages. Any other branch is a preview.

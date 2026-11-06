@@ -2,7 +2,8 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-export type GalleryPhoto = { src: string | null; alt: string };
+/** small: an optional 800px copy (01-800.jpg) that phones and grid tiles load instead. */
+export type GalleryPhoto = { src: string | null; small?: string | null; alt: string };
 
 export type GalleryLabels = {
   comingSoon: string;
@@ -23,12 +24,14 @@ function Frame({
   eager,
   className,
   fit = 'cover',
+  sizes,
 }: {
   photo: GalleryPhoto;
   label: string;
   eager?: boolean;
   className?: string;
   fit?: 'cover' | 'contain';
+  sizes?: string;
 }) {
   if (!photo.src) {
     return (
@@ -45,6 +48,8 @@ function Frame({
     // eslint-disable-next-line @next/next/no-img-element
     <img
       src={photo.src}
+      srcSet={photo.small ? `${photo.small} 800w, ${photo.src} 1600w` : undefined}
+      sizes={photo.small ? sizes ?? '100vw' : undefined}
       alt={photo.alt}
       width={1600}
       height={1200}
@@ -148,7 +153,7 @@ export default function Gallery({ photos, labels }: { photos: GalleryPhoto[]; la
           aria-label={openLabel(0)}
           className={`${tileBtn} md:col-span-2 md:row-span-2`}
         >
-          <Frame photo={photos[0]} label={labels.comingSoon} eager className="aspect-[4/3] h-full w-full md:aspect-auto" />
+          <Frame photo={photos[0]} label={labels.comingSoon} eager sizes="(min-width: 768px) 50vw, 100vw" className="aspect-[4/3] h-full w-full md:aspect-auto" />
         </button>
         {tiles.map((p, k) => {
           const i = k + 1;
@@ -161,7 +166,7 @@ export default function Gallery({ photos, labels }: { photos: GalleryPhoto[]; la
               aria-label={more ? fill(labels.seeAll, 0, total) : openLabel(i)}
               className={`${tileBtn} hidden md:block`}
             >
-              <Frame photo={p} label={labels.comingSoon} className="h-full w-full !text-xs" />
+              <Frame photo={p} label={labels.comingSoon} sizes="(min-width: 768px) 25vw, 100vw" className="h-full w-full !text-xs" />
               {more && (
                 <span className="absolute inset-0 flex items-center justify-center bg-brand-dark/60 text-sm font-semibold text-white">
                   {fill(labels.seeAll, 0, total)}

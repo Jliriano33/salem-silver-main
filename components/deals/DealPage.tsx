@@ -80,6 +80,8 @@ export default function DealPage({ deal, locale, ui }: { deal: Deal; locale: Loc
 
   const photos: GalleryPhoto[] = deal.photos.map((p) => ({
     src: photoExists(deal.slug, p.file) ? `/deals/${deal.slug}/${p.file}` : null,
+    // An 800px copy next to the photo (01-800.jpg) is served to phones; see docs/deals/README.md.
+    small: photoExists(deal.slug, p.file.replace(/\.jpg$/i, '-800.jpg')) ? `/deals/${deal.slug}/${p.file.replace(/\.jpg$/i, '-800.jpg')}` : null,
     alt: text(p.alt, locale, pending),
   }));
   const docs = deal.documents.filter((d) => photoExists(deal.slug, `docs/${d.file}`));

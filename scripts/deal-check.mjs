@@ -75,6 +75,7 @@ function checkDeal(slug, deal) {
   (deal.photos || []).forEach((ph, i) => {
     const f = path.join(PUBLIC_DIR, slug, String(ph && ph.file));
     if (!ph || !ph.file || !fs.existsSync(f)) problems.push(`missing photo: photos[${i}].file = ${ph && ph.file} (public/deals/${slug}/)`);
+    else if (!fs.existsSync(f.replace(/\.jpg$/i, '-800.jpg'))) console.log(`WARN no 800px copy for ${ph.file}: phones will load the full photo (see README, photo prep)`);
   });
   return problems;
 }
