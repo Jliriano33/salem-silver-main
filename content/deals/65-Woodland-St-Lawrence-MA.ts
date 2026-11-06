@@ -13,7 +13,7 @@ const deal: Deal = {
   allowPending: true,
   indexable: true,
   address: { street: '65 Woodland St', city: 'Lawrence', state: 'MA', zip: '01841' },
-  price: { asking: 499000, assignmentFee: 'PLACEHOLDER_ASSIGNMENT_PRICE' },
+  price: { asking: 499000, assignmentFee: 5000 /* Jefri, 2026-11-06 */ },
   details: {
     beds: 4, // Zillow
     baths: 1, // Zillow
@@ -47,7 +47,8 @@ const deal: Deal = {
     plumbing: 'PLACEHOLDER_PLUMBING',
     waterHeater: 'PLACEHOLDER_WATER_HEATER',
   },
-  numbers: { estimatedRepairs: 'PLACEHOLDER_REPAIRS', estimatedRepairsHigh: 'PLACEHOLDER_REPAIRS_HIGH', arv: 'PLACEHOLDER_ARV', showSpread: false },
+  // Jefri, 2026-11-06: one repair figure (no range), ARV, assignment fee above.
+  numbers: { estimatedRepairs: 40000, estimatedRepairsHigh: null, arv: 600000, showSpread: false },
   description: 'PLACEHOLDER_DESCRIPTION',
   // Photos from Jefri's Drive folder (2026-11-06): converted from HEIC, resized to 1600px,
   // metadata (GPS) stripped, reviewed for people and papers. Alt text describes the view only.
