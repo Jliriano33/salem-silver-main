@@ -1,7 +1,9 @@
 import type { Deal } from '../../lib/deals/types';
 
 // 65 Woodland St, Lawrence, MA 01841. Assignment of contract.
-// Every PLACEHOLDER_ value arrives with the photos. Do not guess any of them.
+// Facts marked "Zillow" come from the public Zillow record (zpid 59234070, read 2026-11-06):
+// public-record data, not an inspection; confirm before publishing. Price is Jefri's.
+// No Zillow photos, description, sale history or Zestimate are used. Do not guess any PLACEHOLDER_ value.
 // Alt text stays neutral until the photos are reviewed.
 const deal: Deal = {
   // The live address is salemsilver.com/deals/65-Woodland-St-Lawrence-MA (Jefri, 2026-11-05).
@@ -11,19 +13,22 @@ const deal: Deal = {
   address: { street: '65 Woodland St', city: 'Lawrence', state: 'MA', zip: '01841' },
   price: { asking: 499000, assignmentFee: 'PLACEHOLDER_ASSIGNMENT_PRICE' },
   details: {
-    beds: 'PLACEHOLDER_BEDS',
-    baths: 'PLACEHOLDER_BATHS',
-    sqft: 'PLACEHOLDER_SQFT',
-    lotSize: 'PLACEHOLDER_LOT_SIZE',
+    beds: 4, // Zillow
+    baths: 1, // Zillow
+    sqft: 1360, // Zillow
+    lotSize: { en: '10,018 sq ft', es: '10,018 pies²' }, // Zillow
+    // Zillow lists 1800, a value assessors often use when the year is unknown. Confirm the real year.
     yearBuilt: 'PLACEHOLDER_YEAR_BUILT',
-    propertyType: 'PLACEHOLDER_PROPERTY_TYPE',
+    propertyType: { en: 'Single-family', es: 'Unifamiliar' }, // Zillow
     // Set any of these to null to hide the row.
-    halfBaths: 'PLACEHOLDER_HALF_BATHS',
-    units: 'PLACEHOLDER_UNITS',
-    parking: 'PLACEHOLDER_PARKING',
+    halfBaths: null, // Zillow: none
+    units: null, // single-family
+    // Zillow says parking "Other" and garage "None", but the photos show a driveway and a detached garage.
+    parking: { en: 'Driveway and detached garage', es: 'Entrada de autos y garaje separado' }, // photos 04, 16
+    // Zillow says "None". Confirm before publishing.
     basement: 'PLACEHOLDER_BASEMENT',
-    annualTaxes: 'PLACEHOLDER_ANNUAL_TAXES',
-    assessedValue: 'PLACEHOLDER_ASSESSED_VALUE',
+    annualTaxes: 3927, // Zillow, 2025
+    assessedValue: 446300, // Zillow
   },
   // Condition and systems. Text values, e.g. { en: 'Major repair', es: 'Reparación mayor' }.
   // "Unknown" / "Desconocido" is a fine answer; null hides the row.
@@ -31,9 +36,9 @@ const deal: Deal = {
     overall: 'PLACEHOLDER_CONDITION',
     occupancy: 'PLACEHOLDER_OCCUPANCY',
     roofAge: 'PLACEHOLDER_ROOF_AGE',
-    heatingSystem: 'PLACEHOLDER_HEATING_SYSTEM',
+    heatingSystem: { en: 'Oil, radiators', es: 'Aceite (oil), radiadores' }, // Zillow (oil); radiators in photos 05, 10-12
     heatingAge: 'PLACEHOLDER_HEATING_AGE',
-    airConditioning: 'PLACEHOLDER_AIR_CONDITIONING',
+    airConditioning: { en: 'None', es: 'No tiene' }, // Zillow
     foundationType: 'PLACEHOLDER_FOUNDATION_TYPE',
     foundationCondition: 'PLACEHOLDER_FOUNDATION_CONDITION',
     electrical: 'PLACEHOLDER_ELECTRICAL',
