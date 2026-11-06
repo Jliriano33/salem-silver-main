@@ -6,6 +6,8 @@ import type { Deal } from '../../lib/deals/types';
 // them before publishing. Price, fee, repairs, ARV, condition, occupancy, description
 // come from Jefri. Do not guess any PLACEHOLDER_ value. The Zillow listing photos are used with
 // Jefri's permission (2026-11-06); no Zillow description, sale history or Zestimate is used.
+// Systems facts marked "MLS" come from the MLS PIN listing of June 2026 (#73532932), read
+// 2026-11-06: facts only, no remarks, photos, prices or dates from that listing.
 const deal: Deal = {
   // The live address will be salemsilver.com/deals/33-Huntington-Ave-Methuen-MA.
   slug: '33-Huntington-Ave-Methuen-MA',
@@ -25,7 +27,7 @@ const deal: Deal = {
     // Set any of these to null to hide the row.
     halfBaths: null, // Zillow: none
     units: null, // single-family
-    parking: { en: 'Off-street, paved', es: 'Fuera de la calle, pavimentado' }, // Zillow
+    parking: { en: '4 spaces, paved driveway', es: '4 espacios, entrada pavimentada' }, // MLS
     basement: { en: 'None', es: 'No tiene' }, // Zillow
     annualTaxes: 3821, // Zillow, 2025
     assessedValue: 361200, // Zillow
@@ -33,16 +35,20 @@ const deal: Deal = {
   // Condition and systems. Text values, e.g. { en: 'Major repair', es: 'Reparación mayor' }.
   // "Unknown" / "Desconocido" is a fine answer; null hides the row.
   condition: {
-    overall: 'PLACEHOLDER_CONDITION',
+    overall: { en: 'Major repair', es: 'Reparación mayor' }, // Jefri, 2026-11-06
     occupancy: 'PLACEHOLDER_OCCUPANCY',
     roofAge: 'PLACEHOLDER_ROOF_AGE',
-    heatingSystem: { en: 'Oil, baseboard', es: 'Aceite (oil), zócalo' }, // Zillow
+    heatingSystem: { en: 'Hot-water baseboard, oil', es: 'Zócalo de agua caliente, aceite (oil)' }, // MLS
     heatingAge: 'PLACEHOLDER_HEATING_AGE',
     airConditioning: { en: 'None', es: 'No tiene' }, // Zillow
     foundationType: { en: 'Slab', es: 'Losa' }, // Zillow
     foundationCondition: 'PLACEHOLDER_FOUNDATION_CONDITION',
-    electrical: 'PLACEHOLDER_ELECTRICAL',
-    plumbing: 'PLACEHOLDER_PLUMBING',
+    electrical: { en: '100 amps', es: '100 amperios' }, // MLS
+    // Jefri chose to disclose the failed Title V (2026-11-06).
+    plumbing: {
+      en: "City water; private septic that failed its Title V inspection (buyer's responsibility)",
+      es: 'Agua de la ciudad; séptico privado que falló la inspección Title V (responsabilidad del comprador)',
+    }, // MLS
     waterHeater: { en: 'Tankless', es: 'Sin tanque' }, // Zillow
   },
   numbers: { estimatedRepairs: 'PLACEHOLDER_REPAIRS', estimatedRepairsHigh: 'PLACEHOLDER_REPAIRS_HIGH', arv: 'PLACEHOLDER_ARV', showSpread: false },

@@ -27,18 +27,18 @@ const deal: Deal = {
     units: null, // single-family
     // Zillow says parking "Other" and garage "None", but the photos show a driveway and a detached garage.
     parking: { en: 'Driveway and detached garage', es: 'Entrada de autos y garaje separado' }, // photos 04, 16
-    // Zillow says "None". Confirm before publishing.
-    basement: 'PLACEHOLDER_BASEMENT',
-    annualTaxes: 3927, // Zillow, 2025
-    assessedValue: 446300, // Zillow
+    // MLS PIN tax record (2026-11-06): unfinished basement, 1,058 sq ft (Zillow's "None" was wrong).
+    basement: { en: 'Unfinished, 1,058 sq ft', es: 'Sin terminar, 1,058 pies²' },
+    annualTaxes: 3946, // MLS PIN tax record, FY2026 estimate
+    assessedValue: 456700, // MLS PIN tax record, FY2026
   },
   // Condition and systems. Text values, e.g. { en: 'Major repair', es: 'Reparación mayor' }.
   // "Unknown" / "Desconocido" is a fine answer; null hides the row.
   condition: {
-    overall: 'PLACEHOLDER_CONDITION',
+    overall: { en: 'Moderate repair', es: 'Reparación moderada' }, // Jefri, 2026-11-06
     occupancy: 'PLACEHOLDER_OCCUPANCY',
     roofAge: 'PLACEHOLDER_ROOF_AGE',
-    heatingSystem: { en: 'Oil, radiators', es: 'Aceite (oil), radiadores' }, // Zillow (oil); radiators in photos 05, 10-12
+    heatingSystem: { en: 'Steam radiators, oil', es: 'Radiadores de vapor, aceite (oil)' }, // MLS PIN tax record; radiators in photos
     heatingAge: 'PLACEHOLDER_HEATING_AGE',
     airConditioning: { en: 'None', es: 'No tiene' }, // Zillow
     foundationType: 'PLACEHOLDER_FOUNDATION_TYPE',
