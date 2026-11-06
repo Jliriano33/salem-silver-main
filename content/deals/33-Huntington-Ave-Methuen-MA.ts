@@ -16,7 +16,7 @@ const deal: Deal = {
   allowPending: true,
   indexable: true,
   address: { street: '33 Huntington Ave', city: 'Methuen', state: 'MA', zip: '01844' },
-  price: { asking: 300000 /* Jefri, 2026-11-06 */, assignmentFee: 'PLACEHOLDER_ASSIGNMENT_PRICE' },
+  price: { asking: 300000 /* Jefri, 2026-11-06 */, assignmentFee: 5000 /* Jefri, 2026-11-06 */ },
   details: {
     beds: 2, // Zillow
     baths: 1, // Zillow
@@ -51,7 +51,8 @@ const deal: Deal = {
     }, // MLS
     waterHeater: { en: 'Tankless', es: 'Sin tanque' }, // Zillow
   },
-  numbers: { estimatedRepairs: 'PLACEHOLDER_REPAIRS', estimatedRepairsHigh: 'PLACEHOLDER_REPAIRS_HIGH', arv: 'PLACEHOLDER_ARV', showSpread: false },
+  // Jefri, 2026-11-06: one repair figure (no range), ARV, assignment fee above.
+  numbers: { estimatedRepairs: 100000, estimatedRepairsHigh: null, arv: 500000, showSpread: false },
   description: 'PLACEHOLDER_DESCRIPTION',
   // Photos: the 5 listing photos from the public Zillow page (zpid 56087702), used with
   // permission Jefri confirmed on 2026-11-06. Taken from an earlier listing, so they may not
