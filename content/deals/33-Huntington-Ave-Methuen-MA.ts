@@ -12,7 +12,7 @@ const deal: Deal = {
   published: false,
   indexable: false,
   address: { street: '33 Huntington Ave', city: 'Methuen', state: 'MA', zip: '01844' },
-  price: { asking: 'PLACEHOLDER_PRICE', assignmentFee: 'PLACEHOLDER_ASSIGNMENT_PRICE' },
+  price: { asking: 300000 /* Jefri, 2026-11-06 */, assignmentFee: 'PLACEHOLDER_ASSIGNMENT_PRICE' },
   details: {
     beds: 2, // Zillow
     baths: 1, // Zillow
