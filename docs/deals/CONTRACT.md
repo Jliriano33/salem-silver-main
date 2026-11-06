@@ -53,7 +53,7 @@ No `/deals` index (out of scope). Deal pages are not added to `app/sitemap.ts`.
 7. Description.
 8. Assignment notice (full) directly above the form.
 9. Investor contact form.
-10. Footer: Salem Silver Capital contact only: (617) 714-2020, privacy policy link. No other brand.
+10. Footer: Salem Silver Capital contact only: (617) 631-8547 (Jefri's direct GHL line, since 2026-11-06), privacy policy link. No other brand.
 
 ## Investor form and GoHighLevel
 

@@ -68,6 +68,10 @@ function FactList({ title, rows, twoCol }: { title?: string; rows: Row[]; twoCol
   );
 }
 
+// Contact number on deal pages: Jefri's direct GHL line, "Jefri Liriano" (+1 617-631-8547),
+// at his request (2026-11-06). The rest of salemsilver.com keeps (617) 714-2020.
+const DEAL_PHONE = { tel: '+16176318547', display: '(617) 631-8547' };
+
 const h2 = 'text-xl font-bold text-brand-navy sm:text-2xl';
 
 export default function DealPage({ deal, locale, ui }: { deal: Deal; locale: Locale; ui: DealUiStrings }) {
@@ -169,10 +173,10 @@ export default function DealPage({ deal, locale, ui }: { deal: Deal; locale: Loc
           </Link>
           <div className="flex items-center gap-2 sm:gap-4">
             <a
-              href="tel:+16177142020"
+              href={`tel:${DEAL_PHONE.tel}`}
               className="hidden text-sm font-semibold text-brand-navy hover:text-brand-blue focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-blue sm:inline"
             >
-              (617) 714-2020
+              {DEAL_PHONE.display}
             </a>
             <Link
               href={otherHref}
@@ -331,8 +335,8 @@ export default function DealPage({ deal, locale, ui }: { deal: Deal; locale: Loc
                 <p className="mt-1 text-sm text-brand-silver-light">{street}, {cityLine}</p>
               </div>
               <a href="#inquiry" className={primaryBtn}>{t(L.requestDetails)}</a>
-              <a href="tel:+16177142020" className={secondaryBtn}>
-                {t(L.call)} (617) 714-2020
+              <a href={`tel:${DEAL_PHONE.tel}`} className={secondaryBtn}>
+                {t(L.call)} {DEAL_PHONE.display}
               </a>
               <p className="text-sm text-brand-silver-light">{t(L.pofLine)}</p>
             </div>
@@ -347,8 +351,8 @@ export default function DealPage({ deal, locale, ui }: { deal: Deal; locale: Loc
             <p className="text-sm text-brand-silver-light">{ui.footer.tagline[locale]}</p>
           </div>
           <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
-            <a href="tel:+16177142020" className="text-lg font-semibold text-brand-gold hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold">
-              <span className="sr-only">{ui.footer.phoneLabel[locale]} </span>(617) 714-2020
+            <a href={`tel:${DEAL_PHONE.tel}`} className="text-lg font-semibold text-brand-gold hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold">
+              <span className="sr-only">{ui.footer.phoneLabel[locale]} </span>{DEAL_PHONE.display}
             </a>
             <Link href="/privacy-policy" className="text-sm text-brand-silver-light underline hover:text-brand-gold focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold">
               {ui.footer.privacy[locale]}
