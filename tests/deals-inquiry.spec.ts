@@ -18,7 +18,7 @@ const good = {
   message: 'Can I see it Friday?',
   language: 'en',
   consent: true,
-  consentVersion: 'investor-2026-11-05-draft',
+  consentVersion: 'investor-2026-11-06-v1',
   company: '',
 };
 
@@ -51,7 +51,7 @@ test.describe('API', () => {
     expect(c[1].body).toEqual({ tags: ['salem-silver-deal-page', 'salem-silver-investor', 'assignment-65-woodland-st', 'investor-english'] });
     expect(c[2].body.body).toContain('Buyer type: Cash');
     expect(c[2].body.body).toContain('Proof of funds ready: Yes');
-    expect(c[2].body.body).toContain('Consent: yes (investor-2026-11-05-draft)');
+    expect(c[2].body.body).toContain('Consent: yes (investor-2026-11-06-v1)');
     expect(c[2].body.body).toContain('Message: Can I see it Friday?');
   });
 

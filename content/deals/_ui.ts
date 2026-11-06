@@ -1,7 +1,7 @@
 import type { DealUiStrings } from '../../lib/deals/ui-strings';
 
 // Fixed text for every deal page, English and Latin-American Spanish.
-// Items marked "COPY FOR JEFRI REVIEW" must be approved before any deal is published.
+// The notice and the investor consent were approved by Jefri on 2026-11-06.
 const ui: DealUiStrings = {
   langToggle: {
     toEs: { en: 'Español', es: 'Español' },
@@ -75,14 +75,14 @@ const ui: DealUiStrings = {
     call: { en: 'Call', es: 'Llamar' },
     pofLine: { en: 'Proof of funds required.', es: 'Se requiere prueba de fondos.' },
   },
-  // COPY FOR JEFRI REVIEW
+  // Approved by Jefri 2026-11-06.
   notice: {
     heading: { en: 'About this offer', es: 'Sobre esta oferta' },
     body: {
       en: 'This property is offered as an assignment of contract: the buyer takes over the existing purchase contract. Buyers must provide proof of funds. All figures shown (price, repairs, ARV) are estimates, and investors must verify them on their own before buying.',
       es: 'Esta propiedad se ofrece como cesión de contrato: el comprador asume el contrato de compra existente. Los compradores deben presentar prueba de fondos. Todas las cifras mostradas (precio, reparaciones, ARV) son estimados, y los inversionistas deben verificarlas por su cuenta antes de comprar.',
     },
-    // COPY FOR JEFRI REVIEW: the one-line version shown under the price.
+    // The one-line version shown under the price. Approved 2026-11-06.
     short: {
       en: 'Assignment of contract. Proof of funds required. All figures are estimates to verify.',
       es: 'Cesión de contrato. Se requiere prueba de fondos. Todas las cifras son estimados a verificar.',
@@ -112,13 +112,14 @@ const ui: DealUiStrings = {
     no: { en: 'No', es: 'No' },
     message: { en: 'Message', es: 'Mensaje' },
     optional: { en: 'optional', es: 'opcional' },
-    // DRAFT FOR JEFRI REVIEW: investor consent. The approved site consent is about
-    // selling a home, so it does not fit investors. Needs approval before publishing.
+    // Investor consent, approved by Jefri 2026-11-06 with one addition: contact may
+    // come from AI agents. Change the words only with a new approval, and bump
+    // consentVersion so each lead records the text it saw.
     consent: {
-      en: 'By checking this box, I agree that Salem Silver Capital may call, text and email me at the phone number and email address I entered about this property and similar investment properties. Consent is not a condition of any purchase. Message frequency varies. Message and data rates may apply. Reply STOP to opt out or HELP for help.',
-      es: 'Al marcar esta casilla, acepto que Salem Silver Capital me llame, me envíe mensajes de texto y me escriba por correo electrónico al teléfono y al correo que ingresé, sobre esta propiedad y otras propiedades de inversión similares. El consentimiento no es condición para ninguna compra. La frecuencia de los mensajes varía. Pueden aplicar tarifas de mensajes y datos. Responda STOP para dejar de recibir mensajes o HELP para obtener ayuda.',
+      en: 'By checking this box, I agree that Salem Silver Capital may call, text and email me at the phone number and email address I entered about this property and similar investment properties, including calls and texts from AI agents. Consent is not a condition of any purchase. Message frequency varies. Message and data rates may apply. Reply STOP to opt out or HELP for help.',
+      es: 'Al marcar esta casilla, acepto que Salem Silver Capital me llame, me envíe mensajes de texto y me escriba por correo electrónico al teléfono y al correo que ingresé, sobre esta propiedad y otras propiedades de inversión similares, incluidas llamadas y mensajes de texto de agentes de inteligencia artificial (IA). El consentimiento no es condición para ninguna compra. La frecuencia de los mensajes varía. Pueden aplicar tarifas de mensajes y datos. Responda STOP para dejar de recibir mensajes o HELP para obtener ayuda.',
     },
-    consentVersion: 'investor-2026-11-05-draft',
+    consentVersion: 'investor-2026-11-06-v1',
     submit: { en: 'Send my request', es: 'Enviar mi solicitud' },
     sending: { en: 'Sending...', es: 'Enviando...' },
     errorSummary: {

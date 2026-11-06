@@ -138,8 +138,14 @@ async function main() {
         continue;
       }
       report(slug, problems, warns);
+      // allowPending (Jefri, 2026-11-06): unknown values and missing photos may go live as
+      // "To be announced"; every other problem still stops a production build.
+      const blocking = deal.allowPending === true
+        ? problems.filter((p) => !p.startsWith('placeholder:') && !p.startsWith('missing photo:'))
+        : problems;
+      if (deal.allowPending === true && blocking.length < problems.length) console.log(`${slug}: published with ${problems.length - blocking.length} pending item(s) (allowPending)`);
       if (mismatch) failed = true;
-      else if (production && problems.length) failed = true;
+      else if (production && blocking.length) failed = true;
     }
     if (failed) console.log(build ? 'deal:check --build FAILED' : 'deal:check --all FAILED');
     process.exit(failed ? 1 : 0);

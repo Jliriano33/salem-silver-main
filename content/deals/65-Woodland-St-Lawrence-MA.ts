@@ -8,8 +8,10 @@ import type { Deal } from '../../lib/deals/types';
 const deal: Deal = {
   // The live address is salemsilver.com/deals/65-Woodland-St-Lawrence-MA (Jefri, 2026-11-05).
   slug: '65-Woodland-St-Lawrence-MA',
-  published: false,
-  indexable: false,
+  // Published by Jefri 2026-11-06, with unknown values shown as "To be announced" (allowPending).
+  published: true,
+  allowPending: true,
+  indexable: true,
   address: { street: '65 Woodland St', city: 'Lawrence', state: 'MA', zip: '01841' },
   price: { asking: 499000, assignmentFee: 'PLACEHOLDER_ASSIGNMENT_PRICE' },
   details: {

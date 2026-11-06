@@ -9,8 +9,10 @@ import type { Deal } from '../../lib/deals/types';
 const deal: Deal = {
   // The live address will be salemsilver.com/deals/33-Huntington-Ave-Methuen-MA.
   slug: '33-Huntington-Ave-Methuen-MA',
-  published: false,
-  indexable: false,
+  // Published by Jefri 2026-11-06, with unknown values shown as "To be announced" (allowPending).
+  published: true,
+  allowPending: true,
+  indexable: true,
   address: { street: '33 Huntington Ave', city: 'Methuen', state: 'MA', zip: '01844' },
   price: { asking: 300000 /* Jefri, 2026-11-06 */, assignmentFee: 'PLACEHOLDER_ASSIGNMENT_PRICE' },
   details: {

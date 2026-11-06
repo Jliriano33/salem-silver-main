@@ -46,6 +46,14 @@ export type Deal = {
    * placeholder. Flip to true only after deal:check passes.
    */
   published: boolean;
+  /**
+   * Jefri's call (2026-11-06): publish before every value is known. Unknown fields
+   * and missing photos then show "To be announced" on the live page, and the
+   * production build lists them as warnings instead of failing. Broken data (slug
+   * mismatch, Infinity, an unreviewed document) still fails. Remove it once
+   * deal:check prints READY.
+   */
+  allowPending?: true;
   /** noindex unless Jefri decides otherwise at publish time. */
   indexable: boolean;
 
