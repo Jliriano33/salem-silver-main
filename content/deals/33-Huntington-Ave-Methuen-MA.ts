@@ -4,8 +4,8 @@ import type { Deal } from '../../lib/deals/types';
 // Facts marked "Zillow" come from the public Zillow record for this address, read
 // 2026-11-06 (zpid 56087702). They are public-record data, not an inspection: confirm
 // them before publishing. Price, fee, repairs, ARV, condition, occupancy, description
-// and photos come from Jefri. Do not guess any PLACEHOLDER_ value. No Zillow photos,
-// description text, sale history or Zestimate are used on the page.
+// come from Jefri. Do not guess any PLACEHOLDER_ value. The Zillow listing photos are used with
+// Jefri's permission (2026-11-06); no Zillow description, sale history or Zestimate is used.
 const deal: Deal = {
   // The live address will be salemsilver.com/deals/33-Huntington-Ave-Methuen-MA.
   slug: '33-Huntington-Ave-Methuen-MA',
@@ -47,17 +47,15 @@ const deal: Deal = {
   },
   numbers: { estimatedRepairs: 'PLACEHOLDER_REPAIRS', estimatedRepairsHigh: 'PLACEHOLDER_REPAIRS_HIGH', arv: 'PLACEHOLDER_ARV', showSpread: false },
   description: 'PLACEHOLDER_DESCRIPTION',
+  // Photos: the 5 listing photos from the public Zillow page (zpid 56087702), used with
+  // permission Jefri confirmed on 2026-11-06. Taken from an earlier listing, so they may not
+  // show today's condition. 1024px is the largest size Zillow serves; metadata stripped.
   photos: [
-    { file: '01.jpg', alt: { en: 'Photo 1 of 33 Huntington Ave', es: 'Foto 1 de 33 Huntington Ave' } },
-    { file: '02.jpg', alt: { en: 'Photo 2 of 33 Huntington Ave', es: 'Foto 2 de 33 Huntington Ave' } },
-    { file: '03.jpg', alt: { en: 'Photo 3 of 33 Huntington Ave', es: 'Foto 3 de 33 Huntington Ave' } },
-    { file: '04.jpg', alt: { en: 'Photo 4 of 33 Huntington Ave', es: 'Foto 4 de 33 Huntington Ave' } },
-    { file: '05.jpg', alt: { en: 'Photo 5 of 33 Huntington Ave', es: 'Foto 5 de 33 Huntington Ave' } },
-    { file: '06.jpg', alt: { en: 'Photo 6 of 33 Huntington Ave', es: 'Foto 6 de 33 Huntington Ave' } },
-    { file: '07.jpg', alt: { en: 'Photo 7 of 33 Huntington Ave', es: 'Foto 7 de 33 Huntington Ave' } },
-    { file: '08.jpg', alt: { en: 'Photo 8 of 33 Huntington Ave', es: 'Foto 8 de 33 Huntington Ave' } },
-    { file: '09.jpg', alt: { en: 'Photo 9 of 33 Huntington Ave', es: 'Foto 9 de 33 Huntington Ave' } },
-    { file: '10.jpg', alt: { en: 'Photo 10 of 33 Huntington Ave', es: 'Foto 10 de 33 Huntington Ave' } },
+    { file: '01.jpg', alt: { en: 'House and yard', es: 'Casa y patio' } },
+    { file: '02.jpg', alt: { en: 'Kitchen and dining area', es: 'Cocina y área de comedor' } },
+    { file: '03.jpg', alt: { en: 'Dining area', es: 'Área de comedor' } },
+    { file: '04.jpg', alt: { en: 'Kitchen', es: 'Cocina' } },
+    { file: '05.jpg', alt: { en: 'Enclosed entry porch', es: 'Porche de entrada cerrado' } },
   ],
   // Optional files in public/deals/33-Huntington-Ave-Methuen-MA/docs/. Never the purchase contract or any document about the sale or its parties.
   documents: [],
