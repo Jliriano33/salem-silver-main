@@ -13,7 +13,8 @@
 // PREFILL_TTL_MS, so a second person using the same tab never sees the first person's details (audit A1-01).
 // Besides the named keys, any parameter whose value looks like an email or a US phone number (10 or 11 digits
 // and phone punctuation only) is removed, and so is a fragment that carries a value, an email or a phone
-// number (A1-04, cycle 2). Ad and click ids (fbclid, utm_content with a 15-digit ad id) do not match.
+// number (A1-04, cycle 2; A5-01, cycle 3). UTM and click-id parameters keep numeric values of any length,
+// because ad platforms put 10- and 11-digit campaign ids there; an email in them is still removed (A5-02).
 
 export const PREFILL_KEY = 'ss_lead_prefill';
 export const PREFILL_TTL_MS = 30 * 60 * 1000;
@@ -27,6 +28,9 @@ export interface Prefill {
 
 /** Query parameter, and the Prefill field it fills. */
 export const PII_QUERY_KEYS: Record<string, keyof Prefill> = { address: 'address', n: 'name', e: 'email', p: 'phone' };
+/** Parameters whose numeric values are ids, never phone numbers (A5-02). utm_* is matched by prefix. */
+export const ID_KEYS = ['fbclid', 'gclid', 'gbraid', 'wbraid', 'dclid', 'msclkid', 'ttclid', 'twclid', 'li_fat_id', 'brid'];
+
 /** Removed from URLs too, but never used to prefill (audit A1-04). Keys match without regard to case. */
 export const PII_DROP_KEYS = [
   'name', 'fullname', 'full_name', 'first_name', 'firstname', 'last_name', 'lastname', 'owner_name', 'email',
@@ -80,14 +84,16 @@ export function clearPrefill(): void {
 export const STRIP_PII_SCRIPT = `(function(){
 window.__ssStripPii=function(){try{
 var u=new URL(window.location.href),keys=${JSON.stringify(PII_QUERY_KEYS)},drop=${JSON.stringify(PII_DROP_KEYS)},
-found={},prefill=false,hit=false,k,lk,v,i,names=[];
-var looksPii=function(s){var d=s.replace(/\\D/g,'').length;return /[^\\s@]+@[^\\s@]+\\.[^\\s@]+/.test(s)||(/^[\\d\\s\\-+().]+$/.test(s)&&(d===10||d===11));};
+ids=${JSON.stringify(ID_KEYS)},found={},prefill=false,hit=false,k,lk,v,i,names=[];
+var isEmail=function(s){return /[^\\s@]+@[^\\s@]+\\.[^\\s@]+/.test(s);};
+var isPhone=function(s){var d=s.replace(/\\D/g,'').length;return /^[\\d\\s\\-+().]+$/.test(s)&&(d===10||d===11);};
+var looksPii=function(s,key){var id=key.indexOf('utm_')===0||ids.indexOf(key)>=0;return isEmail(s)||(!id&&isPhone(s));};
 u.searchParams.forEach(function(val,key){names.push(key);});
 for(i=0;i<names.length;i++){k=names[i];lk=k.toLowerCase();v=u.searchParams.get(k)||'';
 if(keys.hasOwnProperty(lk)){if(v){found[keys[lk]]=v;prefill=true;}u.searchParams.delete(k);hit=true;}
-else if(drop.indexOf(lk)>=0||looksPii(v)){u.searchParams.delete(k);hit=true;}}
-var hash=u.hash,dh=hash;try{dh=decodeURIComponent(hash);}catch(e){}
-if(hash&&(hash.indexOf('=')>=0||looksPii(dh))){hash='';hit=true;}
+else if(drop.indexOf(lk)>=0||looksPii(v,lk)){u.searchParams.delete(k);hit=true;}}
+var hash=u.hash,dh=hash.slice(1);try{dh=decodeURIComponent(dh);}catch(e){}
+if(hash&&(hash.indexOf('=')>=0||isEmail(dh)||isPhone(dh))){hash='';hit=true;}
 if(!hit)return;
 if(prefill){found.at=Date.now();try{window.sessionStorage.setItem(${JSON.stringify(PREFILL_KEY)},JSON.stringify(found));}catch(e){}}
 window.history.replaceState(window.history.state,'',u.pathname+u.search+hash);

@@ -119,7 +119,8 @@ export async function POST(request: NextRequest) {
         logForRecovery('Delivery uncertain (timed out)');
         return refuse(504, 'Submission timed out. Please call +1 617-714-2020.');
       }
-      logForRecovery('Not delivered (request failed)');
+      // The connection can fail after n8n has the request, so this is uncertain too (A5-03).
+      logForRecovery('Delivery uncertain (request failed)');
       throw err;
     }
 

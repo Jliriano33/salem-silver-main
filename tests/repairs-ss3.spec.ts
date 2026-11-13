@@ -1,7 +1,7 @@
 import http from 'node:http';
 import fs from 'node:fs';
 import { test, expect } from '@playwright/test';
-import { MAIN_SERVER, SERVER_LOG } from './test-env';
+import { BAD_SERVER, BAD_SERVER_LOG, MAIN_SERVER, SERVER_LOG } from './test-env';
 
 // SS-3 audit cycle 1 repairs (A1-01, A1-04, A1-05, A1-06, A1-07, A1-10, A1-11). A1-09 is in
 // meta-url-ss3.spec.ts, which needs its own browser settings. Fake data only.
@@ -192,3 +192,49 @@ test.describe('cycle 2, in the browser', () => {
 // A3-02 is not testable here: under `next start` the Node server reads the whole request body before it calls
 // an edge route, so the route cannot answer early on this machine. On Cloudflare the body streams to the
 // route and readBodyLimited stops at 16 KB. Reported as NOT TESTED locally.
+
+// Audit cycle 3 repairs (A5-01, A5-02, A5-03), authorized by Jefri on Nov 13 ("Sí, tercer ciclo").
+test.describe('cycle 3', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.context().route('**/*', (route) =>
+      isLocal(new URL(route.request().url()).hostname) ? route.continue() : route.abort());
+  });
+
+  for (const frag of ['#6175550100', '#(617)%20555-0100', '#+1-617-555-0100']) {
+    test(`A5-01: a fragment that is only a phone number (${frag}) is removed`, async ({ page }) => {
+      await page.goto(`/cash-offer${frag}`);
+      await expect(page.getByRole('heading', { name: /correct address/ })).toBeVisible();
+      expect(new URL(page.url()).hash).toBe('');
+    });
+  }
+
+  test('A5-01: an ordinary page anchor stays', async ({ page }) => {
+    await page.goto('/#how-it-works');
+    await expect.poll(() => new URL(page.url()).hash).toBe('#how-it-works');
+  });
+
+  test('A5-02: 10-digit ids in UTMs and click ids stay; phone-shaped values elsewhere still go', async ({ page }) => {
+    const q = new URLSearchParams({
+      utm_content: '6175550100', utm_campaign: '12345678901', utm_term: '(617) 555-0100', gclid: '6175550100',
+      fbclid: '61755501001', ph: '6175550100', utm_source: 'test-ss3@example.com',
+    });
+    await page.goto(`/cash-offer?${q}`);
+    await expect(page.getByRole('heading', { name: /correct address/ })).toBeVisible();
+    const u = new URL(page.url());
+    expect(u.searchParams.get('utm_content')).toBe('6175550100');
+    expect(u.searchParams.get('utm_campaign')).toBe('12345678901');
+    expect(u.searchParams.get('utm_term')).toBe('(617) 555-0100');
+    expect(u.searchParams.get('gclid')).toBe('6175550100');
+    expect(u.searchParams.get('fbclid')).toBe('61755501001');
+    expect(u.searchParams.has('ph'), 'ph').toBe(false);
+    expect(u.searchParams.has('utm_source'), 'an email in a UTM still goes').toBe(false);
+  });
+});
+
+test('A5-03: a request that failed without an answer is logged as delivery uncertain', async ({ request }) => {
+  const before = fs.statSync(BAD_SERVER_LOG).size;
+  expect((await request.post(`${BAD_SERVER}/api/lead`, { data: valid })).status()).toBe(500);
+  const logged = () => fs.readFileSync(BAD_SERVER_LOG).subarray(before).toString('utf8');
+  await expect.poll(logged).toContain('[lead] Delivery uncertain (request failed), kept for recovery');
+  expect(logged()).not.toContain('Not delivered (request failed)');
+});
