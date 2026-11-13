@@ -254,6 +254,9 @@ export default function LeadFormLP({ source }: LeadFormLPProps) {
           </label>{' '}
           <Link href="/privacy-policy" className="underline hover:text-brand-gold">
             Privacy Policy
+          </Link>{' '}
+          <Link href="/terms" className="underline hover:text-brand-gold">
+            Terms
           </Link>
         </p>
       </div>

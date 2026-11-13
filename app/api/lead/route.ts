@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { MAX_BODY_BYTES, fieldRefusal, originRefusal } from '@/lib/lead-validate';
+import { MAX_BODY_BYTES, fieldRefusal, originRefusal, readBodyLimited } from '@/lib/lead-validate';
 
 export const runtime = 'edge';
 
@@ -20,8 +20,8 @@ export async function POST(request: NextRequest) {
       return refuse(415, 'Unsupported content type.');
     }
     if (Number(request.headers.get('content-length') ?? 0) > MAX_BODY_BYTES) return refuse(413, 'Request too large.');
-    const raw = await request.text();
-    if (new TextEncoder().encode(raw).length > MAX_BODY_BYTES) return refuse(413, 'Request too large.');
+    const raw = await readBodyLimited(request.body, MAX_BODY_BYTES);
+    if (raw === null) return refuse(413, 'Request too large.');
 
     let body: Record<string, unknown>;
     try {
@@ -92,7 +92,10 @@ export async function POST(request: NextRequest) {
     };
 
     // Never log webhookUrl: it is the intake's only secret, and this log is Cloudflare's function log (F-050).
-    console.log('[lead] Forwarding to n8n:', JSON.stringify(payload));
+    // The lead's details are logged only if forwarding fails (below), as the record to recover it from;
+    // a lead that n8n took is logged without them (audit A1-05).
+    console.log('[lead] Forwarding to n8n:', payload.source, `phone ***${String(payload.phone).replace(/\D/g, '').slice(-4)}`);
+    const logForRecovery = () => console.log('[lead] Not delivered, kept for recovery:', JSON.stringify(payload));
 
     const headers: Record<string, string> = { 'Content-Type': 'application/json' };
     const secret = process.env.N8N_WEBHOOK_SECRET;
@@ -112,8 +115,10 @@ export async function POST(request: NextRequest) {
       const name = err instanceof Error ? err.name : typeof err;
       if (name === 'TimeoutError' || name === 'AbortError') {
         console.error('[lead] n8n timed out after', WEBHOOK_TIMEOUT_MS, 'ms');
+        logForRecovery();
         return refuse(504, 'Submission timed out. Please call +1 617-714-2020.');
       }
+      logForRecovery();
       throw err;
     }
 
@@ -121,6 +126,7 @@ export async function POST(request: NextRequest) {
     console.log('[lead] n8n response:', res.status, `(${text.length} bytes)`);
 
     if (!res.ok) {
+      logForRecovery();
       return NextResponse.json(
         { success: false, error: 'Submission failed. Please call +1 617-714-2020.' },
         { status: 502 }

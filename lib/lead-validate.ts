@@ -27,6 +27,31 @@ const STRING_FIELDS = [
 export type Refusal = { status: number; error: string };
 
 /**
+ * The body as text, or null once it passes maxBytes. It reads the stream itself, so a chunked body with no
+ * Content-Length is stopped at the limit instead of being buffered whole (audit A1-06).
+ */
+export async function readBodyLimited(body: ReadableStream<Uint8Array> | null, maxBytes: number): Promise<string | null> {
+  if (!body) return '';
+  const reader = body.getReader();
+  const chunks: Uint8Array[] = [];
+  let size = 0;
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    size += value.byteLength;
+    if (size > maxBytes) {
+      await reader.cancel().catch(() => undefined);
+      return null;
+    }
+    chunks.push(value);
+  }
+  const all = new Uint8Array(size);
+  let at = 0;
+  for (const c of chunks) { all.set(c, at); at += c.byteLength; }
+  return new TextDecoder().decode(all);
+}
+
+/**
  * Same host as the request, or the production site. A request with no Origin (a server, curl) is not refused
  * here. The Host header is compared, not request.url, which the Next server may rebuild as localhost.
  */
@@ -41,8 +66,12 @@ export function originRefusal(origin: string | null, host: string | null): Refus
   return { status: 403, error: 'Forbidden.' };
 }
 
-/** Ten digits, a valid US area code and exchange; a leading country code 1 is allowed. */
+/**
+ * Ten digits, a valid US area code and exchange; a leading country code 1 is allowed. Only digits and phone
+ * punctuation may appear, so "abc6175550100xyz" is refused, not cleaned (audit A1-07).
+ */
 export function usPhoneDigits(phone: string): string | null {
+  if (!/^[\d\s\-+().]{10,30}$/.test(phone)) return null;
   let digits = phone.replace(/\D/g, '');
   if (digits.length === 11 && digits.startsWith('1')) digits = digits.slice(1);
   return /^[2-9]\d{2}[2-9]\d{6}$/.test(digits) ? digits : null;

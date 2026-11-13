@@ -104,12 +104,14 @@ export default function PrivacyPolicyPage() {
                 <strong>Cloudflare</strong> hosts the website and handles every visit to it.
               </li>
               <li>
-                <strong>Meta Pixel and the Meta Conversions API.</strong> On every page, these Meta tools record your
-                visit and when you submit a form, together with your browser and device information and Meta cookies.
-                Meta uses this to measure and improve our ads and may connect it to your Facebook or Instagram account.
-                Meta&apos;s tools may also detect contact details you type into our forms and send them to Meta in a
-                scrambled (hashed) form. Meta&apos;s own privacy policy governs what Meta does with this information. We
-                do not put your name, phone number, email or property address in our page addresses.
+                <strong>Meta Pixel.</strong> On every page, Meta&apos;s pixel records your visit, and it records when
+                you send us a cash-offer request, together with the page address, your browser and device information
+                and Meta cookies. The pixel also sends these events to Meta&apos;s Conversions API Gateway. Meta uses
+                this to measure and improve our ads and may connect it to your Facebook or Instagram account. Meta&apos;s
+                tools may also detect contact details you type into our forms and send them to Meta in a scrambled
+                (hashed) form. Meta&apos;s own privacy policy governs what Meta does with this information. Our pages
+                pass your name, phone number, email and property address from page to page without putting them in
+                the page address, and they remove them from any link that carries them before Meta&apos;s pixel loads.
               </li>
               <li>
                 <strong>OpenStreetMap (Nominatim)</strong> receives the address you type, to suggest matching addresses.
@@ -156,17 +158,18 @@ export default function PrivacyPolicyPage() {
               <li><strong>Help:</strong> reply <strong>HELP</strong> to any text, or <ContactLine />.</li>
               <li>
                 No mobile information will be shared with third parties or affiliates for marketing or promotional
-                purposes. Text messaging opt-in data and consent will not be shared with any third parties.
+                purposes. Information may be shared with the service providers that help us run our text messages and
+                customer service, listed in section 3. Other than that, text messaging opt-in data and consent will not
+                be shared with any third parties.
               </li>
             </ul>
           </PolicySection>
 
           <PolicySection number="5" title="How Long We Keep Information">
             <p>
-              We keep your information for as long as we need it to evaluate and follow up on your request. If we do not
-              enter into a transaction with you, we may keep basic contact records for up to three (3) years for business
-              records and legal compliance, and then delete or anonymize them. We keep a record of an opt-out so that we
-              can honor it.
+              We keep your information for as long as we need it to evaluate and follow up on your request, and as long
+              as we need it for our business records and to comply with the law. You can ask us to delete it at any
+              time (section 7). We keep a record of an opt-out so that we can honor it.
             </p>
           </PolicySection>
 

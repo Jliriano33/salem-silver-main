@@ -12,7 +12,7 @@ test('the privacy policy names the real tracking and processors, and never Liria
   const text = (await page.locator('main').innerText()).replace(/\s+/g, ' ');
   expect(text).not.toMatch(/liriano/i);
   expect(text).not.toMatch(/do not (currently )?use[^.]*Meta Pixel/i);
-  for (const name of ['Meta Pixel', 'Conversions API', 'OpenStreetMap', 'GoHighLevel', 'Cloudflare', 'recorded']) {
+  for (const name of ['Meta Pixel', 'Conversions API Gateway', 'OpenStreetMap', 'Google Maps', 'GoHighLevel', 'Cloudflare', 'recorded']) {
     expect(text, `mentions ${name}`).toContain(name);
   }
   expect(text).toContain('Salem Silver Capital');

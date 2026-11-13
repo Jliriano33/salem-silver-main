@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { trackLead } from '@/lib/meta-pixel';
 import { useSearchParams } from 'next/navigation';
-import { clearPrefill, readPrefill } from '@/lib/lead-handoff';
+import { clearPrefill, takePrefill } from '@/lib/lead-handoff';
 import Link from 'next/link';
 import { CONSENT_ERROR, CONSENT_TEXT, CONSENT_VERSION } from '@/lib/consent';
 
@@ -130,6 +130,7 @@ export default function CashOfferQuiz() {
   const [consent, setConsent]       = useState(false);
   // The seller's details arrive in sessionStorage, not the URL (F-004), so they are read after mount.
   const [ready, setReady]           = useState(false);
+  const prefilled                   = useRef(false);
   // Set when /api/lead did not take the lead: the seller stays on step 11 with an error (F-002).
   const [submitError, setSubmitError] = useState('');
   // Honeypot (F-045): hidden from people, so only a bot fills it.
@@ -162,7 +163,9 @@ export default function CashOfferQuiz() {
   useEffect(() => {
     // The head script (lib/lead-handoff.ts) has already moved any ?address=&n=&e=&p= into storage. The
     // query is read too, in case that script could not run, but nothing here writes these to a URL.
-    const pre = readPrefill();
+    if (prefilled.current) return; // once, even when development mode runs this effect twice
+    prefilled.current = true;
+    const pre = takePrefill();
     const address = pre.address || searchParams.get('address') || '';
     setLead(prev => ({
       ...prev,
@@ -793,7 +796,8 @@ export default function CashOfferQuiz() {
                       <label htmlFor="consent-quiz" className="cursor-pointer">
                         {CONSENT_TEXT}
                       </label>{' '}
-                      <Link href="/privacy-policy" className="text-brand-blue underline hover:no-underline">Privacy Policy</Link>
+                      <Link href="/privacy-policy" className="text-brand-blue underline hover:no-underline">Privacy Policy</Link>{' '}
+                      <Link href="/terms" className="text-brand-blue underline hover:no-underline">Terms</Link>
                     </p>
                   </div>
                   {errors.consent && (
