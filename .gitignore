@@ -40,3 +40,12 @@ scripts/.env
 scripts/cf-*.png
 scripts/cf-account-id.txt
 scripts/ghl-webhook-url.txt
+
+# Local-only files that must never reach this public repo (SS-3, F-048). The credentials and the
+# one-off webhook scripts now live outside the repo folder; these lines catch any copy that comes back.
+scripts/set-cloudflare-env*.ts
+scripts/get-ghl-webhook.ts
+/find_ghl_webhook.mjs
+/reports/
+/e2e/
+/test-results/
