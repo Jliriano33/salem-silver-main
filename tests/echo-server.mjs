@@ -1,11 +1,13 @@
 // Local stand-in for the n8n webhook. Test use only; listens on 127.0.0.1:3199.
 // POST /hook... stores the JSON body, GET /all lists stored bodies, POST /reset clears them.
 // POST /mode {"next":"n8n-404"} makes the next hook call answer like n8n does for an inactive workflow:
-// a 404 whose message repeats the requested path.
+// a 404 whose message repeats the requested path. {"next":"hang"} makes the next hook call never answer.
+// GET /headers lists the request headers of every hook call, in order (SS-3, the intake secret header).
 import http from 'node:http';
 
 const PORT = 3199;
 let bodies = [];
+let headers = [];
 let nextMode = null;
 
 const send = (res, status, obj) => {
@@ -18,6 +20,11 @@ const server = http.createServer((req, res) => {
   req.on('data', (chunk) => { raw += chunk; });
   req.on('end', () => {
     if (req.method === 'POST' && req.url.startsWith('/hook')) {
+      headers.push(req.headers);
+      if (nextMode === 'hang') {
+        nextMode = null;
+        return; // never answers; the caller's timeout has to end it
+      }
       if (nextMode === 'n8n-404') {
         nextMode = null;
         return send(res, 404, {
@@ -34,8 +41,10 @@ const server = http.createServer((req, res) => {
       return send(res, 200, { ok: true });
     }
     if (req.method === 'GET' && req.url === '/all') return send(res, 200, bodies);
+    if (req.method === 'GET' && req.url === '/headers') return send(res, 200, headers);
     if (req.method === 'POST' && req.url === '/reset') {
       bodies = [];
+      headers = [];
       nextMode = null;
       return send(res, 200, { ok: true });
     }
