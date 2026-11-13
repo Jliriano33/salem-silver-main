@@ -107,11 +107,12 @@ export default function PrivacyPolicyPage() {
                 <strong>Meta Pixel.</strong> On every page, Meta&apos;s pixel records your visit, and it records when
                 you send us a cash-offer request, together with the page address, your browser and device information
                 and Meta cookies. The pixel also sends these events to Meta&apos;s Conversions API Gateway. Meta uses
-                this to measure and improve our ads and may connect it to your Facebook or Instagram account. Meta&apos;s
-                tools may also detect contact details you type into our forms and send them to Meta in a scrambled
-                (hashed) form. Meta&apos;s own privacy policy governs what Meta does with this information. Our pages
-                pass your name, phone number, email and property address from page to page without putting them in
-                the page address, and they remove them from any link that carries them before Meta&apos;s pixel loads.
+                this to measure and improve our ads and may connect it to your Facebook or Instagram account. We do not
+                use Meta&apos;s automatic advanced matching, which would read the contact details you type into our
+                forms. Meta&apos;s own privacy policy governs what Meta does with this information. Our pages pass your
+                name, phone number, email and property address from page to page without putting them in the page
+                address, and when a link to our site carries details like these, our pages remove the ones they
+                recognize before Meta&apos;s pixel loads.
               </li>
               <li>
                 <strong>OpenStreetMap (Nominatim)</strong> receives the address you type, to suggest matching addresses.

@@ -52,7 +52,7 @@ test.describe('in the browser', () => {
 
   test('A1-01: the thank-you page shows the address once, then forgets it', async ({ page }) => {
     await page.goto('/');
-    await page.evaluate((a) => sessionStorage.setItem('ss_lead_prefill', JSON.stringify({ address: a })), ADDRESS);
+    await page.evaluate((a) => sessionStorage.setItem('ss_lead_prefill', JSON.stringify({ address: a, at: Date.now() })), ADDRESS);
     await page.goto('/thank-you');
     await expect(page.getByText(ADDRESS)).toBeVisible();
     await page.reload();
@@ -92,7 +92,7 @@ test.describe('the lead route', () => {
     const before = fs.statSync(SERVER_LOG).size;
     expect((await request.post('/api/lead', { data: valid })).status()).toBe(502);
     const logged = () => fs.readFileSync(SERVER_LOG).subarray(before).toString('utf8');
-    await expect.poll(logged).toContain('[lead] Not delivered, kept for recovery');
+    await expect.poll(logged).toContain('[lead] Not delivered (n8n answered 404), kept for recovery');
     expect(logged()).toContain(FAKE.email);
   });
 
@@ -121,3 +121,74 @@ test.describe('the lead route', () => {
     expect(await (await request.get(`${ECHO}/all`)).json()).toHaveLength(0);
   });
 });
+
+// Audit cycle 2 repairs (A1-01, A1-04, A1-11, A3-02, A3-03).
+test.describe('cycle 2, in the browser', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.context().route('**/*', (route) =>
+      isLocal(new URL(route.request().url()).hostname) ? route.continue() : route.abort());
+  });
+
+  async function walkToContact(page: import('@playwright/test').Page) {
+    const pane = page.locator('div.bg-white.rounded-2xl').first();
+    const firstChoice = () => pane.locator('button').filter({ hasNotText: 'Back' }).first();
+    await page.getByRole('button', { name: /Yes, that/ }).click();
+    await page.waitForTimeout(450);
+    for (let i = 0; i < 4; i++) { await firstChoice().click(); await page.waitForTimeout(450); }
+    await page.locator('input[type=number]').fill('1800');
+    await page.getByRole('button', { name: /Continue/ }).click();
+    await page.waitForTimeout(450);
+    await firstChoice().click();
+    await page.waitForTimeout(450);
+    await page.getByRole('button', { name: /Continue/ }).click();
+    await page.waitForTimeout(450);
+  }
+
+  test('A1-01: an unread hand-off older than 30 minutes is ignored', async ({ page }) => {
+    await page.goto('/');
+    await page.evaluate((a) => sessionStorage.setItem('ss_lead_prefill',
+      JSON.stringify({ address: a, at: Date.now() - 31 * 60 * 1000 })), ADDRESS);
+    await page.goto('/cash-offer');
+    await expect(page.getByRole('heading', { name: /correct address/ })).toBeVisible();
+    await expect(page.getByText(ADDRESS)).toHaveCount(0);
+  });
+
+  test('A3-03: a second inbound link leaves no name or email from the first in the quiz', async ({ page }) => {
+    await page.goto(`/cash-offer?${new URLSearchParams({ address: ADDRESS, n: FAKE.name, e: FAKE.email, p: FAKE.phone })}`);
+    await expect(page.getByText(ADDRESS)).toBeVisible();
+    await page.goto(`/cash-offer?${new URLSearchParams({ address: OTHER })}`);
+    await expect(page.getByText(OTHER)).toBeVisible();
+    await walkToContact(page);
+    await expect(page.locator('input[placeholder="Enter your full name"]')).toHaveValue('');
+    await expect(page.locator('input[type=email]')).toHaveValue('');
+  });
+
+  test('A1-04: renamed person fields, email or phone values, and fragments are removed; ad and click ids stay', async ({ page }) => {
+    const q = new URLSearchParams({
+      Address: ADDRESS, property_address: OTHER, contact: FAKE.email, ph: '617-555-0100',
+      fbclid: 'IwAR3x_abc1234567890def', utm_content: '120211234567890123', utm_source: 'fb',
+    });
+    await page.goto(`/cash-offer?${q}#${FAKE.email}`);
+    await expect(page.getByText(ADDRESS)).toBeVisible(); // Address, in any case, still prefills
+    const u = new URL(page.url());
+    expect(u.hash).toBe('');
+    for (const k of ['Address', 'property_address', 'contact', 'ph']) expect(u.searchParams.has(k), k).toBe(false);
+    expect(u.searchParams.get('fbclid')).toBe('IwAR3x_abc1234567890def');
+    expect(u.searchParams.get('utm_content')).toBe('120211234567890123');
+    expect(u.searchParams.get('utm_source')).toBe('fb');
+  });
+
+  test('A1-11: the quiz consent step links the terms', async ({ page }) => {
+    await page.goto(`/cash-offer?${new URLSearchParams({ address: ADDRESS })}`);
+    await walkToContact(page);
+    await page.locator('input[placeholder="Enter your full name"]').fill(FAKE.name);
+    await page.locator('input[type=email]').fill(FAKE.email);
+    await page.getByRole('button', { name: /Continue/ }).click();
+    const block = page.locator('#consent-quiz').locator('xpath=ancestor::div[2]');
+    await expect(block.locator('a[href="/terms"]')).toBeVisible();
+  });
+});
+
+// A3-02 is not testable here: under `next start` the Node server reads the whole request body before it calls
+// an edge route, so the route cannot answer early on this machine. On Cloudflare the body streams to the
+// route and readBodyLimited stops at 16 KB. Reported as NOT TESTED locally.

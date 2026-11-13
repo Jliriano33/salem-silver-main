@@ -95,7 +95,7 @@ export async function POST(request: NextRequest) {
     // The lead's details are logged only if forwarding fails (below), as the record to recover it from;
     // a lead that n8n took is logged without them (audit A1-05).
     console.log('[lead] Forwarding to n8n:', payload.source, `phone ***${String(payload.phone).replace(/\D/g, '').slice(-4)}`);
-    const logForRecovery = () => console.log('[lead] Not delivered, kept for recovery:', JSON.stringify(payload));
+    const logForRecovery = (why: string) => console.log(`[lead] ${why}, kept for recovery:`, JSON.stringify(payload));
 
     const headers: Record<string, string> = { 'Content-Type': 'application/json' };
     const secret = process.env.N8N_WEBHOOK_SECRET;
@@ -115,10 +115,11 @@ export async function POST(request: NextRequest) {
       const name = err instanceof Error ? err.name : typeof err;
       if (name === 'TimeoutError' || name === 'AbortError') {
         console.error('[lead] n8n timed out after', WEBHOOK_TIMEOUT_MS, 'ms');
-        logForRecovery();
+        // n8n may still have taken it; the record is for checking by hand, not proof it was lost (A3-01).
+        logForRecovery('Delivery uncertain (timed out)');
         return refuse(504, 'Submission timed out. Please call +1 617-714-2020.');
       }
-      logForRecovery();
+      logForRecovery('Not delivered (request failed)');
       throw err;
     }
 
@@ -126,7 +127,7 @@ export async function POST(request: NextRequest) {
     console.log('[lead] n8n response:', res.status, `(${text.length} bytes)`);
 
     if (!res.ok) {
-      logForRecovery();
+      logForRecovery(`Not delivered (n8n answered ${res.status})`);
       return NextResponse.json(
         { success: false, error: 'Submission failed. Please call +1 617-714-2020.' },
         { status: 502 }
