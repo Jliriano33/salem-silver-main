@@ -5,6 +5,10 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  // /privacy is a common guess for the policy's address (SS-3).
+  async redirects() {
+    return [{ source: '/privacy', destination: '/privacy-policy', permanent: true }];
+  },
   env: {
     // Deal pages (goal NN): drafts are left out of production builds. Inlined at
     // build time because the edge runtime cannot read CF_PAGES_BRANCH.
