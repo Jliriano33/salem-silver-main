@@ -1,6 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import { savePrefill } from '@/lib/lead-handoff';
 import Hero from './Hero';
 import Stats from './Stats';
 import SocialProof from './SocialProof';
@@ -16,8 +17,10 @@ import ServiceArea from './ServiceArea';
 export default function HomeClient() {
   const router = useRouter();
 
+  // The address goes to the quiz in sessionStorage, never in the URL (F-004).
   const handleHeroSubmit = (address: string) => {
-    router.push(`/cash-offer?address=${encodeURIComponent(address)}`);
+    savePrefill({ address });
+    router.push('/cash-offer');
   };
 
   return (

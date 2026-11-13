@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
+import ThankYouAddress from '@/components/ThankYouAddress';
 
 export const runtime = 'edge';
 
@@ -8,15 +9,7 @@ export const metadata = {
   robots: { index: false },
 };
 
-interface ThankYouProps {
-  searchParams: { address?: string };
-}
-
-export default function ThankYou({ searchParams }: ThankYouProps) {
-  const address = searchParams.address
-    ? decodeURIComponent(searchParams.address)
-    : null;
-
+export default function ThankYou() {
   return (
     <>
       <Navbar />
@@ -39,13 +32,7 @@ export default function ThankYou({ searchParams }: ThankYouProps) {
             We Received Your Info!
           </h1>
 
-          {address && (
-            <div className="bg-brand-blue/5 border border-brand-blue/20 rounded-lg px-5 py-3 mb-5 inline-block">
-              <p className="text-brand-blue text-sm font-medium">
-                Property: <span className="font-bold">{address}</span>
-              </p>
-            </div>
-          )}
+          <ThankYouAddress />
 
           <p className="text-gray-600 text-lg leading-relaxed mb-4">
             A member of our team will call you within{' '}

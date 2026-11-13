@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import MetaPixel from "@/components/MetaPixel";
+import { STRIP_PII_SCRIPT } from "@/lib/lead-handoff";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -63,6 +64,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
+      <head>
+        {/* Runs while the HTML is parsed, before Meta's script and the app: moves any seller details out of
+            the address bar (F-004). See lib/lead-handoff.ts. */}
+        <script id="ss-strip-pii" dangerouslySetInnerHTML={{ __html: STRIP_PII_SCRIPT }} />
+      </head>
       <body className={`${inter.className} antialiased`}>
         <MetaPixel />
         {children}

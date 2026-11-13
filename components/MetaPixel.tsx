@@ -35,9 +35,12 @@ export default function MetaPixel() {
     <>
       {/* The host check keeps localhost and *.pages.dev previews out of the
           dataset. It is shared with lirianorealty.com and drives ad delivery,
-          so test traffic in it is not harmless. */}
+          so test traffic in it is not harmless. __ssStripPii (app/layout.tsx)
+          already ran in the head; running it again here makes sure no seller
+          details are in the URL when fbevents.js reads it (F-004). */}
       <Script id="meta-pixel" strategy="afterInteractive">
         {`if (/(^|\\.)salemsilver\\.com$/.test(location.hostname)) {
+if (window.__ssStripPii) window.__ssStripPii();
 !function(f,b,e,v,n,t,s)
 {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
 n.callMethod.apply(n,arguments):n.queue.push(arguments)};

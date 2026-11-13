@@ -116,7 +116,7 @@ export default function GoogleLP() {
             </p>
             <ul className="space-y-2.5 mb-8">
               {[
-                'Licensed & trusted home buyers in MA, NH & RI',
+                'Local home buyers serving MA, NH & RI',
                 'Cash in hand — no bank financing delays',
                 'Serving Boston, Worcester, Manchester, Providence & beyond',
               ].map((item) => (

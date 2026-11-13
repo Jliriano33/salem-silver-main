@@ -6,6 +6,7 @@ import Link from 'next/link';
 import clsx from 'clsx';
 import AddressAutocomplete from '@/components/AddressAutocomplete';
 import { trackLead } from '@/lib/meta-pixel';
+import { savePrefill } from '@/lib/lead-handoff';
 import { CONSENT_ERROR, CONSENT_TEXT, CONSENT_VERSION } from '@/lib/consent';
 
 interface LeadFormLPProps {
@@ -37,6 +38,8 @@ export default function LeadFormLP({ source }: LeadFormLPProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
+  // Honeypot (F-045): hidden from people, so only a bot fills it.
+  const [website, setWebsite] = useState('');
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -87,6 +90,7 @@ export default function LeadFormLP({ source }: LeadFormLPProps) {
           consent: true,
           consent_version: CONSENT_VERSION,
           source_page: window.location.pathname,
+          ...(website ? { website } : {}),
         }),
       });
 
@@ -95,8 +99,9 @@ export default function LeadFormLP({ source }: LeadFormLPProps) {
       trackLead({ content_category: 'salem_silver_seller', content_name: source });
 
       setSuccess(true);
-      const encoded = encodeURIComponent(form.address);
-      setTimeout(() => router.push(`/thank-you?address=${encoded}`), 1500);
+      // /thank-you shows the address from sessionStorage; it never goes in the URL (F-004).
+      savePrefill({ address: form.address });
+      setTimeout(() => router.push('/thank-you'), 1500);
     } catch {
       setError('Something went wrong. Please call us at +1 617-714-2020.');
     } finally {
@@ -251,6 +256,20 @@ export default function LeadFormLP({ source }: LeadFormLPProps) {
             Privacy Policy
           </Link>
         </p>
+      </div>
+
+      {/* Honeypot (F-045): not displayed, out of the tab order and hidden from screen readers. */}
+      <div aria-hidden="true" className="hidden">
+        <label htmlFor={`lp-website-${source}`}>Website</label>
+        <input
+          id={`lp-website-${source}`}
+          name="website"
+          type="text"
+          tabIndex={-1}
+          autoComplete="off"
+          value={website}
+          onChange={(e) => setWebsite(e.target.value)}
+        />
       </div>
 
       <div

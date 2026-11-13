@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { trackLead } from '@/lib/meta-pixel';
 import { useSearchParams } from 'next/navigation';
+import { clearPrefill, readPrefill } from '@/lib/lead-handoff';
 import Link from 'next/link';
 import { CONSENT_ERROR, CONSENT_TEXT, CONSENT_VERSION } from '@/lib/consent';
 
@@ -116,6 +117,7 @@ const BTN_BACK    = 'mt-3 text-sm text-gray-400 hover:text-brand-blue transition
 const EYEBROW     = 'text-xs font-bold text-brand-gold uppercase tracking-wide mb-3';
 const HEADLINE    = 'text-2xl lg:text-3xl font-bold text-gray-900 mb-2';
 const SUBHEAD     = 'text-gray-500 mb-6';
+const SUBMIT_FAILED = 'We could not send your request. Please try again.';
 
 export default function CashOfferQuiz() {
   const searchParams = useSearchParams();
@@ -126,9 +128,15 @@ export default function CashOfferQuiz() {
   const [submitting, setSubmitting] = useState(false);
   const [errors, setErrors]         = useState<Partial<Record<string, string>>>({});
   const [consent, setConsent]       = useState(false);
+  // The seller's details arrive in sessionStorage, not the URL (F-004), so they are read after mount.
+  const [ready, setReady]           = useState(false);
+  // Set when /api/lead did not take the lead: the seller stays on step 11 with an error (F-002).
+  const [submitError, setSubmitError] = useState('');
+  // Honeypot (F-045): hidden from people, so only a bot fills it.
+  const [website, setWebsite]       = useState('');
 
   const [lead, setLead] = useState<Lead>({
-    address:         searchParams.get('address') || '',
+    address:         '',
     unitNumber:      '',
     homeValue:       '',
     sellingReason:   '',
@@ -141,9 +149,9 @@ export default function CashOfferQuiz() {
     finishedSqft:    '',
     garageSize:      'none',
     occupancy:       '',
-    fullName:        searchParams.get('n') || '',
-    email:           searchParams.get('e') || '',
-    phone:           searchParams.get('p') || '',
+    fullName:        '',
+    email:           '',
+    phone:           '',
     interestedInAgent: searchParams.get('interested_in_agent') !== 'false',
     utmSource:       searchParams.get('utm_source')   || '',
     utmMedium:       searchParams.get('utm_medium')   || '',
@@ -152,8 +160,20 @@ export default function CashOfferQuiz() {
   });
 
   useEffect(() => {
-    if (!lead.address) setShowAddrEdit(true);
-    setEditedAddr(lead.address);
+    // The head script (lib/lead-handoff.ts) has already moved any ?address=&n=&e=&p= into storage. The
+    // query is read too, in case that script could not run, but nothing here writes these to a URL.
+    const pre = readPrefill();
+    const address = pre.address || searchParams.get('address') || '';
+    setLead(prev => ({
+      ...prev,
+      address,
+      fullName: pre.name  || searchParams.get('n') || '',
+      email:    pre.email || searchParams.get('e') || '',
+      phone:    pre.phone || searchParams.get('p') || '',
+    }));
+    if (!address) setShowAddrEdit(true);
+    setEditedAddr(address);
+    setReady(true);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const set = (field: keyof Lead, value: string | boolean | string[]) =>
@@ -170,6 +190,7 @@ export default function CashOfferQuiz() {
   const go = (n: Step) => {
     setStep(n);
     setErrors({});
+    setSubmitError('');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -220,7 +241,9 @@ export default function CashOfferQuiz() {
     if (!consent) errs.consent = CONSENT_ERROR;
     if (Object.keys(errs).length) { setErrors(errs); return; }
     setErrors({});
+    setSubmitError('');
     setSubmitting(true);
+    let sent = false;
     try {
       const res = await fetch('/api/lead', {
         method: 'POST',
@@ -246,16 +269,29 @@ export default function CashOfferQuiz() {
           consent:   true,
           consent_version: CONSENT_VERSION,
           source_page: window.location.pathname,
+          ...(website ? { website } : {}),
         }),
       });
 
-      if (res.ok) trackLead({ content_category: 'salem_silver_seller', content_name: 'cash-offer-quiz' });
+      if (res.ok) {
+        sent = true;
+        trackLead({ content_category: 'salem_silver_seller', content_name: 'cash-offer-quiz' });
+      } else {
+        // A 400 names the field that is wrong; anything else is our side.
+        const reply = await res.json().catch(() => null) as { error?: unknown } | null;
+        const detail = res.status === 400 && typeof reply?.error === 'string' ? reply.error : '';
+        setSubmitError(detail || SUBMIT_FAILED);
+      }
     } catch {
-      // Swallow — don't block the user on a network hiccup
+      setSubmitError(SUBMIT_FAILED);
     } finally {
       setSubmitting(false);
     }
-    go('done');
+    // Only a lead that /api/lead accepted reaches the thank-you screen (F-002).
+    if (sent) {
+      clearPrefill();
+      go('done');
+    }
   };
 
   // ── Progress bar ─────────────────────────────────────────────────────────
@@ -349,8 +385,8 @@ export default function CashOfferQuiz() {
           {/* ── Left: question panes ── */}
           <div className="bg-white rounded-2xl shadow-sm p-6 lg:p-8">
 
-            {/* STEP 1 — Address */}
-            {step === 1 && (
+            {/* STEP 1 — Address (after mount: the address comes from sessionStorage) */}
+            {step === 1 && ready && (
               <div>
                 <p className={EYEBROW}>{stepLabel}</p>
                 <h1 className={HEADLINE}>Is this the correct address?</h1>
@@ -673,7 +709,7 @@ export default function CashOfferQuiz() {
 
                 <div className="flex items-center gap-3 mb-5">
                   <span className="bg-brand-blue text-white text-xs font-bold px-2.5 py-1 rounded">BBB A+</span>
-                  <span className="text-sm text-gray-500">Trusted by thousands of homeowners</span>
+                  <span className="text-sm text-gray-500">Trusted by hundreds of homeowners</span>
                 </div>
 
                 <div className="space-y-4">
@@ -724,7 +760,7 @@ export default function CashOfferQuiz() {
 
                 <div className="flex items-center gap-3 mb-5">
                   <span className="bg-brand-blue text-white text-xs font-bold px-2.5 py-1 rounded">BBB A+</span>
-                  <span className="text-sm text-gray-500">Trusted by thousands of homeowners</span>
+                  <span className="text-sm text-gray-500">Trusted by hundreds of homeowners</span>
                 </div>
 
                 <div>
@@ -764,6 +800,28 @@ export default function CashOfferQuiz() {
                     <p id="consent-quiz-error" role="alert" className="text-red-600 text-sm mt-2">{errors.consent}</p>
                   )}
                 </div>
+
+                {/* Honeypot (F-045): not displayed, out of the tab order and hidden from screen readers. */}
+                <div aria-hidden="true" className="hidden">
+                  <label htmlFor="quiz-website">Website</label>
+                  <input
+                    id="quiz-website"
+                    name="website"
+                    type="text"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    value={website}
+                    onChange={e => setWebsite(e.target.value)}
+                  />
+                </div>
+
+                {submitError && (
+                  <div role="alert" className="mt-5 bg-red-50 border border-red-300 rounded-xl px-4 py-3 text-sm text-red-700">
+                    {submitError}{' '}
+                    If this keeps happening, call us at{' '}
+                    <a href="tel:+16177142020" className="font-semibold underline">(617) 714-2020</a>.
+                  </div>
+                )}
 
                 <button
                   onClick={submitPhone}
